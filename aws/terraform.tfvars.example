@@ -7,3 +7,5 @@ region = "YOUR-AWS-REGION"
 availability_zones = ["YOUR-AWS-ZONE-1", "YOUR-AWS-ZONE-2", "YOUR-AWS-ZONE-3"]
 
 hosted_zone = "example.com."
+
+harbor = false

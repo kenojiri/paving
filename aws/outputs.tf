@@ -110,6 +110,9 @@ locals {
 
     ssl_certificate = var.ssl_certificate
     ssl_private_key = var.ssl_private_key
+
+    harbor_dns = var.harbor ? aws_route53_record.harbor[0].name : ""
+    harbor_target_group = var.harbor ? aws_lb_target_group.harbor.name : ""
   }
 }
 

@@ -173,3 +173,30 @@ resource "aws_lb_target_group" "pks-api-8443" {
   protocol = "TCP"
   vpc_id   = aws_vpc.vpc.id
 }
+
+# for Harbor (shared LB with PKS)
+
+resource "aws_lb_listener" "harbor" {
+  load_balancer_arn = aws_lb.pks-api.arn
+  port              = 443
+  protocol          = "TCP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.harbor.arn
+  }
+}
+
+resource "aws_lb_target_group" "harbor" {
+  name     = "${var.environment_name}-harbor-443"
+  port     = 443
+  protocol = "TCP"
+  vpc_id   = aws_vpc.vpc.id
+
+  health_check {
+    healthy_threshold   = 6
+    unhealthy_threshold = 6
+    interval            = 10
+    protocol            = "TCP"
+  }
+}

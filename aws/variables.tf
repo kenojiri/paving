@@ -75,3 +75,13 @@ variable "tags" {
   default     = {}
   type        = map(string)
 }
+
+variable "harbor" {
+  description = "include terraforming for Harbor."
+  default     = false
+  type        = bool
+}
+
+locals {
+  harbor_eip = "${var.harbor ? 1 : 0}"
+}

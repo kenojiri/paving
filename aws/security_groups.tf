@@ -245,6 +245,13 @@ resource "aws_security_group" "pks-api-lb" {
     to_port     = 8443
   }
 
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+  }
+
   egress {
     cidr_blocks = ["0.0.0.0/0"]
     protocol    = "-1"
