@@ -17,7 +17,7 @@ of the `Terraform CLI` and providers:
     |-|-|
     | GCP | 4.1.0 |
     | AWS | 3.65.0 |
-    | Azure | 2.85.0 | 
+    | Azure | 2.85.0 |
 
 ## Usage
 
