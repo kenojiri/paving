@@ -1,0 +1,13 @@
+access_key = "YOUR-AWS-ACCESS-KEY"
+secret_key = "YOUR-AWS-SECRET-KEY"
+environment_name = "YOUR-ENVIRONMNET-NAME"
+base_domain = "example.com."
+region = "YOUR-AWS-REGION"
+availability_zone = "YOUR-AWS-ZONE"
+
+ec2_ssh_key_pair_name = "YOUR-SSH-KEY-PAIR-NAME" #optional. generated and registered if blank
+cloudflare_api_key = "YOUR-CLOUDFLARE-API-KEY" #optional. use Route53 if blank
+cloudflare_zone_id = "YOUR-CLOUDFLARE-ZONE_ID" #optional. mandatory if use CloudFlare DNS
+letsencrypt_email_address = "YOUR-EMAIL-ADDRESS" #optional. use Let's Encrypt if provided
+#ssl_certificate = "" #optional
+#ssl_private_key = "" #optional
