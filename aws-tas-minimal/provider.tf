@@ -5,8 +5,8 @@ provider "aws" {
 }
 
 provider "cloudflare" {
-  #count = var.cloudflare_api_token == "" ? 0 : 1
-  api_token = var.cloudflare_api_token
+  email = var.email
+  api_key = var.cloudflare_api_key
 }
 
 provider "acme" {

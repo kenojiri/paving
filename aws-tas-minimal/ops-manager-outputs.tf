@@ -22,19 +22,24 @@ locals {
 
     ops_manager_subnet_id = aws_subnet.public-subnet.id
     ops_manager_public_ip = aws_eip.ops-manager.public_ip
-    ops_manager_dns = var.cloudflare_api_token == "" ? aws_route53_record.ops-manager.name : "opsman.${var.environment_name}.${var.base_domain}"
+    ops_manager_dns = var.cloudflare_api_key == "" ? aws_route53_record.ops-manager[0].name : "opsman.${var.environment_name}.${var.base_domain}"
     ops_manager_iam_user_access_key = aws_iam_access_key.ops-manager.id
     ops_manager_iam_user_secret_key = aws_iam_access_key.ops-manager.secret
     ops_manager_iam_instance_profile_name = aws_iam_instance_profile.ops-manager.name
-    ops_manager_key_pair_name = var.ec2_ssh_key_pair_name == "" ? aws_key_pair.ops-manager.key_name : var.ec2_ssh_key_pair_name
-    ops_manager_ssh_public_key = var.ec2_ssh_key_pair_name == "" ? tls_private_key.ops-manager.public_key_openssh : ""
-    ops_manager_ssh_private_key = var.ec2_ssh_key_pair_name == "" ? tls_private_key.ops-manager.private_key_pem : ""
+    ops_manager_key_pair_name = var.ec2_ssh_key_pair_name == "" ? aws_key_pair.ops-manager[0].key_name : var.ec2_ssh_key_pair_name
+    ops_manager_ssh_public_key = var.ec2_ssh_key_pair_name == "" ? tls_private_key.ops-manager[0].public_key_openssh : ""
+    ops_manager_ssh_private_key = var.ec2_ssh_key_pair_name == "" ? tls_private_key.ops-manager[0].private_key_pem : ""
     ops_manager_bucket = aws_s3_bucket.ops-manager-bucket.bucket
     ops_manager_security_group_id         = aws_security_group.ops-manager.id
     ops_manager_security_group_name       = aws_security_group.ops-manager.name
 
-    ssl_certificate = var.letsencrypt_email_address == "" ? var.ssl_certificate : acme_certificate.certificate.certificate_pem
-    ssl_private_key = var.letsencrypt_email_address == "" ? var.ssl_private_key : acme_certificate.certificate.private_key_pem
+    ssl_certificate = var.ssl_certificate == "" ? var.ssl_certificate : acme_certificate.certificate[0].certificate_pem
+    ssl_private_key = var.ssl_certificate == "" ? var.ssl_private_key : acme_certificate.certificate[0].private_key_pem
+
+    db_endpoint = var.use_rds == true ? aws_db_instance.tas[0].endpoint : ""
+    db_username = var.use_rds == true ? aws_db_instance.tas[0].username : ""
+    db_password = var.use_rds == true ? aws_db_instance.tas[0].password : ""
+    # db_name = var.use_rds == true ? mysql_database.bosh[0].name : ""
   }
 }
 

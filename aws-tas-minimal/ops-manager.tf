@@ -16,5 +16,5 @@ resource "tls_private_key" "ops-manager" {
 resource "aws_key_pair" "ops-manager" {
   count = var.ec2_ssh_key_pair_name == "" ? 1 : 0
   key_name = "${var.environment_name}-ops-manager-key"
-  public_key = tls_private_key.ops-manager.public_key_openssh
+  public_key = tls_private_key.ops-manager[0].public_key_openssh
 }

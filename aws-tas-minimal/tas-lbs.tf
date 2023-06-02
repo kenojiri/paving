@@ -1,8 +1,8 @@
 resource "aws_lb" "tas" {
-  name                             = "${var.environment_name}-tas-lb"
-  load_balancer_type               = "network"
+  name = "${var.environment_name}-tas-lb"
+  load_balancer_type = "network"
   enable_cross_zone_load_balancing = false
-  subnets                          = aws_subnet.public-subnet.subnet_id
+  subnets = [aws_subnet.public-subnet.id]
 }
 
 resource "aws_lb_listener" "web-80" {

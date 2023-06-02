@@ -27,7 +27,18 @@ resource "aws_subnet" "private-subnet" {
 
   tags = merge(
     var.tags,
-    { Name = "${var.environment_name}-management-subnet" }
+    { Name = "${var.environment_name}-private-subnet" }
+  )
+}
+
+resource "aws_subnet" "secondary-private-subnet" {
+  vpc_id            = aws_vpc.vpc.id
+  cidr_block        = var.secondary_private_subnet_cidr
+  availability_zone = var.secondary_availability_zone
+
+  tags = merge(
+    var.tags,
+    { Name = "${var.environment_name}-secondary-private-subnet" }
   )
 }
 
@@ -36,7 +47,7 @@ resource "aws_internet_gateway" "gw" {
 }
 
 resource "aws_eip" "nat" {
-  domain = "vpc"
+  #domain = "vpc"
 
   tags = merge(
     var.tags,
@@ -61,13 +72,18 @@ resource "aws_route_table" "deployment" {
 }
 
 resource "aws_route" "nat-gateway-route" {
-  route_table_id         = aws_route_table.deployment.id
-  nat_gateway_id         = aws_nat_gateway.nat.id
+  route_table_id = aws_route_table.deployment.id
+  nat_gateway_id = aws_nat_gateway.nat.id
   destination_cidr_block = "0.0.0.0/0"
 }
 
 resource "aws_route_table_association" "route-private-subnet" {
   subnet_id      = aws_subnet.private-subnet.id
+  route_table_id = aws_route_table.deployment.id
+}
+
+resource "aws_route_table_association" "route-secondary-private-subnet" {
+  subnet_id      = aws_subnet.secondary-private-subnet.id
   route_table_id = aws_route_table.deployment.id
 }
 
