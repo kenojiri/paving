@@ -1,12 +1,12 @@
 resource "random_id" "db_passwd" {
   byte_length = 8
-  prefix = "VMware1!"
+  prefix = "paving"
 }
 
 resource "aws_db_subnet_group" "tas" {
   count = var.use_rds == true ? 1 : 0
   name       = "${var.environment_name}-rds-subnet-group"
-  subnet_ids = [aws_subnet.private-subnet.id, aws_subnet.secondary-private-subnet.id]
+  subnet_ids = [aws_subnet.private-subnet.id, aws_subnet.secondary-private-subnet[0].id]
 
   tags = {
     Name = "${var.environment_name}-rds-subnet-group"

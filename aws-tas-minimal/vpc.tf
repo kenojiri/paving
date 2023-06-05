@@ -1,6 +1,6 @@
 resource "aws_vpc" "vpc" {
-  cidr_block           = "10.0.0.0/16"
-  instance_tenancy     = "default"
+  cidr_block = "10.0.0.0/16"
+  instance_tenancy = "default"
   enable_dns_hostnames = true
 
   tags = merge(
@@ -10,8 +10,8 @@ resource "aws_vpc" "vpc" {
 }
 
 resource "aws_subnet" "public-subnet" {
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.public_subnet_cidr
+  vpc_id = aws_vpc.vpc.id
+  cidr_block = var.public_subnet_cidr
   availability_zone = var.availability_zone
 
   tags = merge(
@@ -21,8 +21,8 @@ resource "aws_subnet" "public-subnet" {
 }
 
 resource "aws_subnet" "private-subnet" {
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.private_subnet_cidr
+  vpc_id = aws_vpc.vpc.id
+  cidr_block = var.private_subnet_cidr
   availability_zone = var.availability_zone
 
   tags = merge(
@@ -32,8 +32,9 @@ resource "aws_subnet" "private-subnet" {
 }
 
 resource "aws_subnet" "secondary-private-subnet" {
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.secondary_private_subnet_cidr
+  count = var.use_rds ? 1 : 0
+  vpc_id = aws_vpc.vpc.id
+  cidr_block = var.secondary_private_subnet_cidr
   availability_zone = var.secondary_availability_zone
 
   tags = merge(
@@ -83,7 +84,8 @@ resource "aws_route_table_association" "route-private-subnet" {
 }
 
 resource "aws_route_table_association" "route-secondary-private-subnet" {
-  subnet_id      = aws_subnet.secondary-private-subnet.id
+  count = var.use_rds ? 1 : 0
+  subnet_id      = aws_subnet.secondary-private-subnet[0].id
   route_table_id = aws_route_table.deployment.id
 }
 
