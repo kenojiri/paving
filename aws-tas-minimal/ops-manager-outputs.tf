@@ -39,7 +39,6 @@ locals {
     db_endpoint = var.use_rds == true ? aws_db_instance.tas[0].endpoint : ""
     db_username = var.use_rds == true ? aws_db_instance.tas[0].username : ""
     db_password = var.use_rds == true ? aws_db_instance.tas[0].password : ""
-    # db_name = var.use_rds == true ? mysql_database.bosh[0].name : ""
   }
 }
 

@@ -22,19 +22,6 @@ locals {
     db_endpoint = var.use_rds == true ? aws_db_instance.tas[0].endpoint : ""
     db_username = var.use_rds == true ? aws_db_instance.tas[0].username : ""
     db_password = var.use_rds == true ? aws_db_instance.tas[0].password : ""
-    # db_name_account = var.use_rds == true ? mysql_database.account[0].name : ""
-    # db_name_app_usage_service = var.use_rds == true ? mysql_database.app_usage_service[0].name : ""
-    # db_name_autoscale = var.use_rds == true ? mysql_database.autoscale[0].name : ""
-    # db_name_ccdb = var.use_rds == true ? mysql_database.ccdb[0].name : ""
-    # db_name_credhub = var.use_rds == true ? mysql_database.credhub[0].name : ""
-    # db_name_diego = var.use_rds == true ? mysql_database.diego[0].name : ""
-    # db_name_locket = var.use_rds == true ? mysql_database.locket[0].name : ""
-    # db_name_networkpolicyserver = var.use_rds == true ? mysql_database.networkpolicyserver[0].name : ""
-    # db_name_nfsvolume = var.use_rds == true ? mysql_database.nfsvolume[0].name : ""
-    # db_name_notifications = var.use_rds == true ? mysql_database.notifications[0].name : ""
-    # db_name_routing = var.use_rds == true ? mysql_database.routing[0].name : ""
-    # db_name_silk = var.use_rds == true ? mysql_database.silk[0].name : ""
-    # db_name_uaa = var.use_rds == true ? mysql_database.uaa[0].name : ""
   }
 }
 
