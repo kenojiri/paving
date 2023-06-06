@@ -1,4 +1,6 @@
-# AWS
+# AWS minimal pavement for TAS
+
+![](diagram.png)
 
 Follow [these instructions](https://docs.pivotal.io/platform/ops-manager/2-8/aws/prepare-env-terraform.html)
 to create an IAM user that is needed to run the terraform templates.
