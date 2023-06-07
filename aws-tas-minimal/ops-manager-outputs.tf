@@ -1,0 +1,52 @@
+locals {
+  stable_config_opsmanager = {
+    access_key = var.access_key
+    secret_key = var.secret_key
+    environment_name = var.environment_name
+    availability_zones = var.availability_zone
+    region = var.region
+
+    vpc_id = aws_vpc.vpc.id
+
+    public_subnet_id = aws_subnet.public-subnet.id
+    public_subnet_cidr = aws_subnet.public-subnet.cidr_block
+    public_subnet_gateway = cidrhost(aws_subnet.public-subnet.cidr_block, 1)
+    public_subnet_reserved_ip_ranges = "${cidrhost(aws_subnet.public-subnet.cidr_block, 1)}-${cidrhost(aws_subnet.public-subnet.cidr_block, 9)}"
+    private_subnet_id = aws_subnet.private-subnet.id
+    private_subnet_cidr = aws_subnet.private-subnet.cidr_block
+    private_subnet_gateway = cidrhost(aws_subnet.private-subnet.cidr_block, 1)
+    private_subnet_reserved_ip_ranges = "${cidrhost(aws_subnet.private-subnet.cidr_block, 1)}-${cidrhost(aws_subnet.private-subnet.cidr_block, 9)}"
+
+    platform_vms_security_group_id   = aws_security_group.platform.id
+    platform_vms_security_group_name = aws_security_group.platform.name
+    nat_security_group_id   = aws_security_group.nat.id
+    nat_security_group_name = aws_security_group.nat.name
+
+    ops_manager_subnet_id = aws_subnet.public-subnet.id
+    ops_manager_public_ip = aws_eip.ops-manager.public_ip
+    ops_manager_dns = var.cloudflare_api_key == "" ? aws_route53_record.ops-manager[0].name : "opsman.${var.environment_name}.${var.base_domain}"
+    ops_manager_iam_user_access_key = aws_iam_access_key.ops-manager.id
+    ops_manager_iam_user_secret_key = aws_iam_access_key.ops-manager.secret
+    ops_manager_iam_instance_profile_name = aws_iam_instance_profile.ops-manager.name
+    ops_manager_key_pair_name = var.ec2_ssh_key_pair_name == "" ? aws_key_pair.ops-manager[0].key_name : var.ec2_ssh_key_pair_name
+    ops_manager_ssh_public_key = var.ec2_ssh_key_pair_name == "" ? tls_private_key.ops-manager[0].public_key_openssh : ""
+    ops_manager_ssh_private_key = var.ec2_ssh_key_pair_name == "" ? tls_private_key.ops-manager[0].private_key_pem : ""
+    ops_manager_bucket = aws_s3_bucket.ops-manager-bucket.bucket
+    ops_manager_security_group_id         = aws_security_group.ops-manager.id
+    ops_manager_security_group_name       = aws_security_group.ops-manager.name
+
+    ssl_certificate = var.ssl_certificate == "" ? "${acme_certificate.certificate[0].certificate_pem}\n${acme_certificate.certificate[0].issuer_pem}" : var.ssl_certificate
+    ssl_private_key = var.ssl_certificate == "" ? acme_certificate.certificate[0].private_key_pem : var.ssl_private_key
+
+    db_endpoint = var.use_rds == true ? aws_db_instance.tas[0].endpoint : ""
+    db_username = var.use_rds == true ? aws_db_instance.tas[0].username : ""
+    db_password = var.use_rds == true ? aws_db_instance.tas[0].password : ""
+    db_ca_cert_id = var.use_rds == true ? aws_db_instance.tas[0].ca_cert_identifier : ""
+    db_ca_cert = var.use_rds == true ? data.curl.rds_ca_cert[0].response : ""
+  }
+}
+
+output "stable_config_opsmanager" {
+  value     = jsonencode(local.stable_config_opsmanager)
+  sensitive = true
+}
