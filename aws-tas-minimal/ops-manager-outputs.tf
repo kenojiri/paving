@@ -10,6 +10,8 @@ locals {
 
     public_subnet_id = aws_subnet.public-subnet.id
     public_subnet_cidr = aws_subnet.public-subnet.cidr_block
+    public_subnet_gateway = cidrhost(aws_subnet.public-subnet.cidr_block, 1)
+    public_subnet_reserved_ip_ranges = "${cidrhost(aws_subnet.public-subnet.cidr_block, 1)}-${cidrhost(aws_subnet.public-subnet.cidr_block, 9)}"
     private_subnet_id = aws_subnet.private-subnet.id
     private_subnet_cidr = aws_subnet.private-subnet.cidr_block
     private_subnet_gateway = cidrhost(aws_subnet.private-subnet.cidr_block, 1)
@@ -33,12 +35,14 @@ locals {
     ops_manager_security_group_id         = aws_security_group.ops-manager.id
     ops_manager_security_group_name       = aws_security_group.ops-manager.name
 
-    ssl_certificate = var.ssl_certificate == "" ? var.ssl_certificate : acme_certificate.certificate[0].certificate_pem
-    ssl_private_key = var.ssl_certificate == "" ? var.ssl_private_key : acme_certificate.certificate[0].private_key_pem
+    ssl_certificate = var.ssl_certificate == "" ? "${acme_certificate.certificate[0].certificate_pem}\n${acme_certificate.certificate[0].issuer_pem}" : var.ssl_certificate
+    ssl_private_key = var.ssl_certificate == "" ? acme_certificate.certificate[0].private_key_pem : var.ssl_private_key
 
     db_endpoint = var.use_rds == true ? aws_db_instance.tas[0].endpoint : ""
     db_username = var.use_rds == true ? aws_db_instance.tas[0].username : ""
     db_password = var.use_rds == true ? aws_db_instance.tas[0].password : ""
+    db_ca_cert_id = var.use_rds == true ? aws_db_instance.tas[0].ca_cert_identifier : ""
+    db_ca_cert = var.use_rds == true ? data.curl.rds_ca_cert[0].response : ""
   }
 }
 

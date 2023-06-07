@@ -33,3 +33,11 @@ resource "aws_db_instance" "tas" {
     { "Name" = "${var.environment_name}-rds" },
   )
 }
+
+provider "curl" {}
+
+data "curl" "rds_ca_cert" {
+  count = var.use_rds == true ? 1 : 0
+  http_method = "GET"
+  uri = "https://truststore.pki.rds.amazonaws.com/${var.region}/${var.region}-bundle.pem"
+}

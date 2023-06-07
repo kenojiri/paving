@@ -6,6 +6,8 @@ locals {
     resources_bucket_name = aws_s3_bucket.resources-bucket.bucket
     tas_blobstore_iam_instance_profile_name = aws_iam_instance_profile.tas-blobstore.name
 
+    platform_vms_security_group_id   = aws_security_group.platform.id
+    platform_vms_security_group_name = aws_security_group.platform.name
     web_lb_security_group_id = aws_security_group.web-lb.id
     web_lb_security_group_name = aws_security_group.web-lb.name
     web_target_group_names = [
@@ -22,6 +24,11 @@ locals {
     db_endpoint = var.use_rds == true ? aws_db_instance.tas[0].endpoint : ""
     db_username = var.use_rds == true ? aws_db_instance.tas[0].username : ""
     db_password = var.use_rds == true ? aws_db_instance.tas[0].password : ""
+    db_ca_cert_id = var.use_rds == true ? aws_db_instance.tas[0].ca_cert_identifier : ""
+    db_ca_cert = var.use_rds == true ? data.curl.rds_ca_cert[0].response : ""
+
+    ssl_certificate = var.ssl_certificate == "" ? "${acme_certificate.certificate[0].certificate_pem}\n${acme_certificate.certificate[0].issuer_pem}" : var.ssl_certificate
+    ssl_private_key = var.ssl_certificate == "" ? acme_certificate.certificate[0].private_key_pem : var.ssl_private_key
   }
 }
 

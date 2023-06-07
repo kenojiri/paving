@@ -18,9 +18,9 @@ terraform {
       source  = "vancluever/acme"
       version = "~> 2.0"
     }
-    mysql = {
-      source  = "petoju/mysql"
-      version = "~> 3.0"
+    curl = {
+      source  = "anschoewe/curl"
+      version = "~> 1.0"
     }
   }
   required_version = "~> 1.0"
