@@ -6,7 +6,7 @@ resource "random_id" "db_passwd" {
 resource "aws_db_subnet_group" "rds" {
   count = var.use_rds == true ? 1 : 0
   name       = "${var.environment_name}-rds-subnet-group"
-  subnet_ids = [aws_subnet.private.id, aws_subnet.private-2.id]
+  subnet_ids = aws_subnet.private[*].id
   tags = {
     Name = "${var.environment_name}-rds-subnet-group"
   }

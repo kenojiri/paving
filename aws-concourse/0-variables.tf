@@ -3,19 +3,26 @@ variable "region" {
   description = "target AWS region."
 }
 
-variable "access_key_id" {
+variable "environment_name" {
   type = string
-  default = ""
+  description = "This name is appended as a prefix to the subdomain for this environment."
 }
 
-variable "secret_access_key" {
+variable "vpc_cidr" {
   type = string
-  default = ""
+  default = "172.30.0.0/16"
+  description = "The CIDR for subnets."
 }
 
-variable "session_token" {
-  type = string
-  default = ""
+variable "private_subnet_cidrs" {
+  type = list
+  default = ["172.30.1.0/24","172.30.2.0/24"]
+  description = "The CIDR for subnets."
+}
+
+variable "availability_zones" {
+  type = list
+  description = "The availability zone to use. Must belong to the provided region."
 }
 
 variable "base_domain" {
@@ -23,73 +30,10 @@ variable "base_domain" {
   description = "base domain name (e.g. example.com)"
 }
 
-variable "environment_name" {
-  type = string
-  description = "This name is appended as a prefix to the subdomain for this environment."
-}
-
-variable "primary_availability_zone" {
-  type = string
-  description = "The availability zone to use. Must belong to the provided region."
-}
-
-variable "secondary_availability_zone" {
-  type = string
-  description = "The secondary availability zone to use. Must belong to the provided region."
-}
-
-variable "ec2_ssh_key_pair_name" {
-  type = string
-  description = "Existing EC2 SSH key pair name in the region."
-}
-
-variable "email_address" {
-  type = string
-  description = "Email address for requesting Let's Encrypt certs."
-}
-
 variable "use_rds" {
   type = bool
   default = true
   description = "If this variable is 'true', AWS RDS MySQL instance will be created."
-}
-
-### deeper customization
-
-variable "acme_server_url" {
-  type = string
-  default = "https://acme-v02.api.letsencrypt.org/directory"
-  description = "default value is for Let's Encrypt production. can be changed if you want to use Lets' Encrypt staging or another ACME server"
-}
-
-variable "primary_private_subnet_cidr" {
-  type        = string
-  default     = "172.31.200.0/24"
-  description = "The CIDR for the Private subnet in primary AZ."
-}
-
-variable "secondary_private_subnet_cidr" {
-  type        = string
-  default     = "172.31.201.0/24"
-  description = "The CIDR for the Private subnet in secondary AZ."
-}
-
-variable "opsman_allowed_cidrs" {
-  type        = list
-  default     = ["0.0.0.0/0"]
-  description = "CIDRs allowed to communicate with Ops Manager."
-}
-
-variable "opsman_instance_type" {
-  type        = string
-  default     = "t3.large"
-  description = "EC2 instance type of OpsManager."
-}
-
-variable "opsman_boot_disk_size_in_gb" {
-  type        = number
-  default     = 100
-  description = "OpsManager root disk size in GB."
 }
 
 variable "db_username" {
