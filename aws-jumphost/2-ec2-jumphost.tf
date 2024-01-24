@@ -1,22 +1,28 @@
 ## inputs
-## - availability_zone
+## - jumphost_vpc_name
+## - jumphost_subnet_name
+## - ec2_ssh_key_pair_name
 
-data "aws_vpc" "default" {
-  default = true
+data "aws_vpc" "jumphost" {
+  filter {
+    name   = "tag:Name"
+    values = [var.jumphost_vpc_name]
+  }
 }
 
-data "aws_subnet" "public" {
-  vpc_id = data.aws_vpc.default.id
-  availability_zone = var.availability_zone
-  default_for_az = true
+data "aws_subnet" "jumphost" {
+  filter {
+    name   = "tag:Name"
+    values = [var.jumphost_subnet_name]
+  }
 }
 
 resource "aws_security_group" "jumphost" {
   name   = "jumphost-sg"
-  vpc_id = data.aws_vpc.default.id
+  vpc_id = data.aws_vpc.jumphost.id
 
   ingress {
-    cidr_blocks = ["160.16.198.102/32"]
+    cidr_blocks = ["0.0.0.0/0"]
     protocol    = "tcp"
     from_port   = 22
     to_port     = 22
@@ -56,12 +62,12 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_network_interface" "jumphost" {
-  subnet_id = data.aws_subnet.public.id
+  subnet_id = data.aws_subnet.jumphost.id
   security_groups = [aws_security_group.jumphost.id]
 }
 
 resource "aws_instance" "jumphost" {
-  ami           = data.aws_ami.ubuntu.id
+  ami = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
   key_name = var.ec2_ssh_key_pair_name
   root_block_device {
@@ -69,7 +75,7 @@ resource "aws_instance" "jumphost" {
   }
   network_interface {
     network_interface_id = aws_network_interface.jumphost.id
-    device_index         = 0
+    device_index = 0
   }
   iam_instance_profile = aws_iam_instance_profile.jumphost.name
 
@@ -78,10 +84,5 @@ resource "aws_instance" "jumphost" {
   }
 }
 
-resource "aws_eip" "jumphost" {
-  instance = aws_instance.jumphost.id
-  domain = "vpc"
-}
-
 ## outputs
-## - public_ip = aws_eip.jumphost.public_ip
+## - jumphost_private_ip = aws_network_interface.jumphost.private_ips[0]

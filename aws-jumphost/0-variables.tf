@@ -16,9 +16,14 @@ variable "region" {
   description = "target AWS region."
 }
 
-variable "availability_zone" {
+variable "jumphost_vpc_name" {
   type = string
-  description = "The availability zone to use. Must belong to the provided region."
+  description = "name of VPC connected by Jumphost."
+}
+
+variable "jumphost_subnet_name" {
+  type = string
+  description = "name of subnet connected by Jumphost."
 }
 
 variable "ec2_ssh_key_pair_name" {
