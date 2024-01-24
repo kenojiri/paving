@@ -38,19 +38,13 @@ resource "aws_iam_instance_profile" "opsman" {
 
 data "aws_iam_policy_document" "opsman" {
   statement {
-    sid       = "InfoAboutCurrentInstanceProfile"
+    sid       = "IAMPermissions"
     effect    = "Allow"
-    actions   = ["iam:GetInstanceProfile"]
-    resources = [aws_iam_instance_profile.opsman.arn]
-  }
-
-  statement {
-    sid     = "CreateInstanceWithCurrentInstanceProfile"
-    effect  = "Allow"
-    actions = ["iam:PassRole"]
-    resources = compact([
-      aws_iam_role.opsman.arn,
-    ])
+    actions   = [
+      "iam:GetInstanceProfile",
+      "iam:PassRole",
+    ]
+    resources = ["*"]
   }
 
   statement {

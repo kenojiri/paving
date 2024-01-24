@@ -38,19 +38,13 @@ resource "aws_iam_instance_profile" "concourse" {
 
 data "aws_iam_policy_document" "concourse" {
   statement {
-    sid       = "InfoAboutCurrentInstanceProfile"
+    sid       = "IAMPermissions"
     effect    = "Allow"
-    actions   = ["iam:GetInstanceProfile"]
-    resources = [aws_iam_instance_profile.concourse.arn]
-  }
-
-  statement {
-    sid     = "CreateInstanceWithCurrentInstanceProfile"
-    effect  = "Allow"
-    actions = ["iam:PassRole"]
-    resources = compact([
-      aws_iam_role.concourse.arn,
-    ])
+    actions   = [
+      "iam:GetInstanceProfile",
+      "iam:PassRole",
+    ]
+    resources = ["*"]
   }
 
   statement {
