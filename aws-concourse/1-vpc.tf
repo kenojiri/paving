@@ -1,16 +1,25 @@
-resource "aws_vpc" "vpc" {
-  cidr_block = var.vpc_cidr
-  instance_tenancy = "default"
-  enable_dns_hostnames = true
-  enable_dns_support = true
-  tags = { Name = "${var.environment_name}-vpc" }
+## inputs
+## - vpc_name
+## - subnet_names
+
+data "aws_vpc" "concourse" {
+  filter {
+    name   = "tag:Name"
+    values = [var.vpc_name]
+  }
 }
 
-resource "aws_subnet" "private" {
-  count = length(var.private_subnet_cidrs)
-
-  vpc_id = aws_vpc.vpc.id
-  availability_zone = element(var.availability_zones, count.index)
-  cidr_block = element(var.private_subnet_cidrs, count.index)
-  tags = { Name = "${var.environment_name}-private-subnet-${count.index}" }
+data "aws_subnet" "concourse" {
+  for_each = toset(var.subnet_names)
+  filter {
+    name   = "tag:Name"
+    values = [each.value]
+  }
 }
+
+## outputs
+## - opsman_subnet_id = data.aws_subnet.concourse[0].id
+## - opsman_private_ip = "${cidrhost(data.aws_subnet.concourse[0].cidr_block, 10)}"
+## - plane_subnet_ids = data.aws_subnet.concourse[*].id
+## - plane_subnet_cidrs = data.aws_subnet.concourse[*].cidr_block
+## - plane_availability_zones = data.aws_subnet.concourse[*].availability_zone

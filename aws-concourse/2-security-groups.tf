@@ -1,9 +1,12 @@
+## inputs
+## - environment_name
+
 resource "aws_security_group" "plane" {
   name   = "${var.environment_name}-plane-sg"
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = data.aws_vpc.concourse.id
 
   ingress {
-    cidr_blocks = [aws_vpc.vpc.cidr_block]
+    cidr_blocks = [data.aws_vpc.concourse.cidr_block]
     protocol    = "-1"
     from_port   = 0
     to_port     = 0
@@ -21,7 +24,7 @@ resource "aws_security_group" "plane" {
 
 resource "aws_security_group" "opsman" {
   name   = "${var.environment_name}-opsman-sg"
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = data.aws_vpc.concourse.id
 
   ingress {
     cidr_blocks = ["0.0.0.0/0"]
@@ -56,7 +59,7 @@ resource "aws_security_group" "opsman" {
 
 resource "aws_security_group" "concourse" {
   name   = "${var.environment_name}-concourse-sg"
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = data.aws_vpc.concourse.id
 
   ingress {
     cidr_blocks = ["0.0.0.0/0"]
@@ -84,17 +87,17 @@ resource "aws_security_group" "concourse" {
 
 resource "aws_security_group" "pgsql" {
   name   = "${var.environment_name}-pgsql-sg"
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = data.aws_vpc.concourse.id
 
   ingress {
-    cidr_blocks = [aws_vpc.vpc.cidr_block]
+    cidr_blocks = [data.aws_vpc.concourse.cidr_block]
     protocol    = "tcp"
     from_port   = 5432
     to_port     = 5432
   }
 
   egress {
-    cidr_blocks = [aws_vpc.vpc.cidr_block]
+    cidr_blocks = [data.aws_vpc.concourse.cidr_block]
     protocol    = "-1"
     from_port   = 0
     to_port     = 0
@@ -102,3 +105,8 @@ resource "aws_security_group" "pgsql" {
 
   tags = { "Name" = "${var.environment_name}-pgsql-sg" }
 }
+
+## outputs
+## - opsman_security_group_ids = [ aws_security_group.plane.id, aws_security_group.opsman.id ]
+## - concourse_web_security_group_ids = [ aws_security_group.concourse.id, aws_security_group.plane.id]
+## - concourse_worker_security_group_ids = [ aws_security_group.plane.id]

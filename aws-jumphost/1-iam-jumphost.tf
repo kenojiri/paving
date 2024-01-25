@@ -38,28 +38,33 @@ resource "aws_iam_instance_profile" "jumphost" {
 
 data "aws_iam_policy_document" "jumphost" {
   statement {
-    sid       = "IAMPermissions"
+    sid       = "JumphostInfoAboutCurrentInstanceProfile"
     effect    = "Allow"
     actions   = [
       "iam:GetInstanceProfile",
+    ]
+    resources = [aws_iam_instance_profile.jumphost.arn]
+  }
+
+  statement {
+    sid       = "JumphostCreateInstanceWithInstanceProfile"
+    effect    = "Allow"
+    actions   = [
       "iam:PassRole",
     ]
-    resources = ["*"]
+    resources = compact([
+      aws_iam_role.opsman.arn,
+      aws_iam_role.opsman-s3.arn,
+    ])
   }
 
   statement {
     sid    = "EC2Permissions"
     effect = "Allow"
     actions = [
-      "ec2:CreateVpc",
-      "ec2:CreateTransitGateway",
-      "ec2:CreateTags",
       "ec2:DescribeVpcs",
       "ec2:DescribeTransitGateways",
       "ec2:DescribeVpcAttribute",
-      "ec2:DeleteVpc",
-      "ec2:DeleteTransitGateway",
-      "ec2:ModifyVpcAttribute",
       "ec2:CreateSubnet",
       "ec2:CreateSecurityGroup",
       "ec2:DescribeSubnets",
@@ -67,19 +72,14 @@ data "aws_iam_policy_document" "jumphost" {
       "ec2:DescribeNetworkInterfaces",
       "ec2:DeleteSubnet",
       "ec2:DeleteSecurityGroup",
-      "ec2:CreateTransitGatewayVpcAttachment",
       "ec2:RevokeSecurityGroupEgress",
       "ec2:DescribeTransitGatewayVpcAttachments",
       "ec2:AuthorizeSecurityGroupIngress",
       "ec2:GetTransitGatewayRouteTableAssociations",
       "ec2:GetTransitGatewayRouteTablePropagations",
-      "ec2:DeleteTransitGatewayVpcAttachment",
       "ec2:AuthorizeSecurityGroupEgress",
-      "ec2:CreateVpcEndpoint",
       "ec2:DescribeVpcEndpoints",
       "ec2:DescribePrefixLists",
-      "ec2:DeleteVpcEndpoints",
-      "ec2:ModifyTransitGateway",
       "ec2:DescribeTags",
       "elasticloadbalancing:DescribeTargetGroups",
       "elasticloadbalancing:CreateTargetGroup",
@@ -125,45 +125,6 @@ data "aws_iam_policy_document" "jumphost" {
       "ec2:DeleteSnapshot",
       "ec2:DescribeSnapshots",
       "ec2:DescribeRegions",
-    ]
-    resources = ["*"]
-  }
-
-  statement {
-    sid     = "Route53Permissions"
-    effect  = "Allow"
-    actions = [
-      "route53:ListHostedZones",
-      "route53:GetHostedZone",
-      "route53:ListTagsForResource",
-      "route53:ChangeResourceRecordSets",
-      "route53:GetChange",
-      "route53:ListResourceRecordSets",
-    ]
-    resources = ["*"]
-  }
-
-  statement {
-    sid     = "S3Permissions"
-    effect  = "Allow"
-    actions = [
-      "s3:CreateBucket",
-      "s3:ListBucket",
-      "s3:GetBucketPolicy",
-      "s3:GetBucketAcl",
-      "s3:GetBucketCors",
-      "s3:GetBucketWebsite",
-      "s3:GetBucketVersioning",
-      "s3:GetAccelerateConfiguration",
-      "s3:GetBucketRequestPayment",
-      "s3:GetBucketLogging",
-      "s3:GetLifecycleConfiguration",
-      "s3:GetReplicationConfiguration",
-      "s3:GetEncryptionConfiguration",
-      "s3:GetBucketObjectLockConfiguration",
-      "s3:GetBucketTagging",
-      "s3:DeleteBucket",
-      "s3:PutBucketVersioning",
     ]
     resources = ["*"]
   }

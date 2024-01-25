@@ -1,4 +1,4 @@
 region = "us-east-1"
 environment_name = "pfauto"
-availability_zones = ["us-east-1b","us-east-1c"]
-base_domain = "example.com"
+vpc_name = "platform-management"
+subnet_names = ["platform-management-a","platform-management-b","platform-management-c"]

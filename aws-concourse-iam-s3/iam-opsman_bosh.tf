@@ -88,20 +88,10 @@ data "aws_iam_policy_document" "opsman" {
     ]
     resources = ["*"]
   }
-
-  statement {
-    sid     = "S3Permissions"
-    effect  = "Allow"
-    actions = [
-      "s3:ListBucket",
-      "s3:*Object",
-    ]
-    resources = ["*"]
-  }
 }
 
 resource "aws_iam_policy" "opsman" {
-  name   = "${var.environment_name}-opsman-role"
+  name   = "${var.environment_name}-opsman-policy"
   policy = data.aws_iam_policy_document.opsman.json
 }
 
