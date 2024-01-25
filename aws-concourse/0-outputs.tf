@@ -1,11 +1,12 @@
 locals {
   config = {
-    opsman_subnet_id = aws_subnet.private[0].id
-    opsman_security_group_ids = [ aws_security_group.plane.id, aws_security_group.opsman.id ]
-    bosh_security_group_id = aws_security_group.plane.id
-    bosh_bucket_name = aws_s3_bucket.bosh.bucket
     plane_subnet_ids = aws_subnet.private[*].id
     plane_subnet_cidrs = aws_subnet.private[*].cidr_block
+    opsman_subnet_id = aws_subnet.private[0].id
+    opsman_security_group_ids = [ aws_security_group.plane.id, aws_security_group.opsman.id ]
+    opsman_private_ip = "${cidrhost(aws_subnet.private[0].cidr_block, 10)}"
+    bosh_security_group_id = aws_security_group.plane.id
+    bosh_bucket_name = aws_s3_bucket.bosh.bucket
     concourse_fqdn = aws_route53_record.concourse.name
     concourse_web_security_group_ids = [ aws_security_group.concourse.id, aws_security_group.plane.id]
     concourse_worker_security_group_ids = [ aws_security_group.plane.id ]
