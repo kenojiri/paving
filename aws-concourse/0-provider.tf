@@ -15,4 +15,7 @@ terraform {
 
 provider "aws" {
   region = var.region
+  assume_role {
+    role_arn = var.paving_pfmgmt_role_arn
+  }
 }

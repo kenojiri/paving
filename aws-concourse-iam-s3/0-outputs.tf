@@ -1,5 +1,6 @@
 locals {
   config = {
+    paving_pfmgmt_role_arn = aws_iam_role.paving-pfmgmt.arn
     opsman_iam_instance_profile_name = aws_iam_instance_profile.opsman.name
     opsman_bucket_name = aws_s3_bucket.opsman.bucket
     concourse_iam_instance_profile_name = aws_iam_instance_profile.concourse.name

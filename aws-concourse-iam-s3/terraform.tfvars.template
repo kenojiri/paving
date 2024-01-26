@@ -3,3 +3,4 @@ secret_access_key = "((AWS_SECRET_ACCESS_KEY))"
 session_token = "((AWS_SESSION_TOKEN))"
 region = "us-east-1"
 environment_name = "pfauto"
+paving_pfmgmt_allowed_iam_user_arns = ["arn:aws:iam::((AWS_ACCOUNT_ID)):user/*"]

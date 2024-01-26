@@ -3,6 +3,11 @@ variable "region" {
   description = "target AWS region."
 }
 
+variable "paving_pfmgmt_role_arn" {
+  type = string
+  description = "IAM role ARN to be assumed by Terraform AWS provider."
+}
+
 variable "environment_name" {
   type = string
   description = "This name is appended as a prefix to the subdomain for this environment."

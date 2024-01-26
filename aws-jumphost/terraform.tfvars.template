@@ -1,7 +1,0 @@
-access_key_id = "((AWS_ACCESS_KEY_ID))"
-secret_access_key = "((AWS_SECRET_ACCESS_KEY))"
-session_token = "((AWS_SESSION_TOKEN (optional)))"
-region = "us-east-1"
-jumphost_vpc_name = "((VPC_NAME))"
-jumphost_subnet_name = "((SUBNET_NAME))"
-ec2_ssh_key_pair_name = "((AWS_EC2_SSH_KEYPAIR_NAME))"

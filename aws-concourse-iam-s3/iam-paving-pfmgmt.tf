@@ -1,53 +1,38 @@
 ## inputs
-## (none)
+## - paving_pfmgmt_allowed_iam_user_arns
 
-resource "aws_iam_role" "jumphost" {
-  name = "jumphost-role"
+data "aws_iam_policy_document" "assume-role-policy" {
+  # allow IAM users to assume this role
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "AWS"
+      identifiers = var.paving_pfmgmt_allowed_iam_user_arns
+      #identifiers = ["arn:aws:iam::${data.aws_caller_identity.source.account_id}:root"]
+    }
+  }
+}
 
+resource "aws_iam_role" "paving-pfmgmt" {
+  name = "paving-pfmgmt-role"
   lifecycle {
     create_before_destroy = true
   }
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": [
-          "ec2.amazonaws.com"
-        ]
-      },
-      "Action": [
-        "sts:AssumeRole"
-      ]
-    }
-  ]
-}
-EOF
+  assume_role_policy = data.aws_iam_policy_document.assume-role-policy.json
 }
 
-resource "aws_iam_instance_profile" "jumphost" {
-  name = "jumphost"
-  role = aws_iam_role.jumphost.name
-  lifecycle {
-    ignore_changes = [name]
-  }
-}
-
-data "aws_iam_policy_document" "jumphost" {
+data "aws_iam_policy_document" "paving-pfmgmt" {
   statement {
-    sid       = "JumphostInfoAboutCurrentInstanceProfile"
+    sid       = "GetInfoAboutCurrentInstanceProfile"
     effect    = "Allow"
     actions   = [
       "iam:GetInstanceProfile",
     ]
-    resources = [aws_iam_instance_profile.jumphost.arn]
+    resources = [aws_iam_instance_profile.opsman.arn]
   }
 
   statement {
-    sid       = "JumphostCreateInstanceWithInstanceProfile"
+    sid       = "CreateOpsManInstanceWithInstanceProfile"
     effect    = "Allow"
     actions   = [
       "iam:PassRole",
@@ -147,15 +132,15 @@ data "aws_iam_policy_document" "jumphost" {
   }
 }
 
-resource "aws_iam_policy" "jumphost" {
-  name   = "jumphost"
-  policy = data.aws_iam_policy_document.jumphost.json
+resource "aws_iam_policy" "paving-pfmgmt" {
+  name   = "paving-pfmgmt"
+  policy = data.aws_iam_policy_document.paving-pfmgmt.json
 }
 
-resource "aws_iam_role_policy_attachment" "jumphost" {
-  role       = aws_iam_role.jumphost.name
-  policy_arn = aws_iam_policy.jumphost.arn
+resource "aws_iam_role_policy_attachment" "paving-pfmgmt" {
+  role       = aws_iam_role.paving-pfmgmt.name
+  policy_arn = aws_iam_policy.paving-pfmgmt.arn
 }
 
 ## outputs
-## - iam_instance_profile_name = aws_iam_instance_profile.jumphost.name
+## - paving_pfmgmt_role_arn = aws_iam_role.paving-pfmgmt.arn
