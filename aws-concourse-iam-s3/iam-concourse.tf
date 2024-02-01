@@ -43,6 +43,7 @@ data "aws_iam_policy_document" "concourse" {
     actions   = [
       "iam:GetInstanceProfile",
       "iam:PassRole",
+      "iam:CreateServiceLinkedRole",
     ]
     resources = ["*"]
   }
@@ -70,6 +71,8 @@ data "aws_iam_policy_document" "concourse" {
       "ec2:DescribeVpcEndpoints",
       "ec2:DescribePrefixLists",
       "ec2:DescribeTags",
+      "ec2:DescribeInternetGateways",
+      "ec2:DescribeInstanceTypes",
       "elasticloadbalancing:DescribeTargetGroups",
       "elasticloadbalancing:CreateTargetGroup",
       "elasticloadbalancing:ModifyTargetGroupAttributes",

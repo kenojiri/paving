@@ -39,8 +39,16 @@ data "aws_iam_policy_document" "paving-pfmgmt" {
     ]
     resources = compact([
       aws_iam_role.opsman.arn,
-      #aws_iam_role.opsman-s3.arn,
     ])
+  }
+
+  statement {
+    sid       = "IAMPermissions"
+    effect    = "Allow"
+    actions   = [
+      "iam:CreateServiceLinkedRole",
+    ]
+    resources = ["*"]
   }
 
   statement {
@@ -66,6 +74,8 @@ data "aws_iam_policy_document" "paving-pfmgmt" {
       "ec2:DescribeVpcEndpoints",
       "ec2:DescribePrefixLists",
       "ec2:DescribeTags",
+      "ec2:DescribeInternetGateways",
+      "ec2:DescribeInstanceTypes",
       "elasticloadbalancing:DescribeTargetGroups",
       "elasticloadbalancing:CreateTargetGroup",
       "elasticloadbalancing:ModifyTargetGroupAttributes",
