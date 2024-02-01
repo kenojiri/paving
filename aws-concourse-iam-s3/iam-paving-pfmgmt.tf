@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "paving-pfmgmt" {
     ]
     resources = compact([
       aws_iam_role.opsman.arn,
-      aws_iam_role.opsman-s3.arn,
+      #aws_iam_role.opsman-s3.arn,
     ])
   }
 
