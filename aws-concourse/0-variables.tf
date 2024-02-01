@@ -23,6 +23,16 @@ variable "subnet_names" {
   description = "The Platform Management Plane subnet names."
 }
 
+variable "subnet_ids" {
+  type = list
+  description = "The Platform Management Plane subnet IDs."
+}
+
+variable "elb_subnet_ids" {
+  type = list
+  description = "The Platform Management Plane subnet IDs for ELB."
+}
+
 variable "db_username" {
   type = string
   default = "dbadmin"

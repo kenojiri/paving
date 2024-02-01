@@ -11,7 +11,7 @@ resource "random_id" "db_passwd" {
 
 resource "aws_db_subnet_group" "rds" {
   name       = "${var.environment_name}-rds-subnet-group"
-  subnet_ids = data.aws_subnet.concourse[*].id
+  subnet_ids = var.elb_subnet_ids
   tags = {
     Name = "${var.environment_name}-rds-subnet-group"
   }
