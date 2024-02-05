@@ -42,7 +42,7 @@ resource "aws_lb_listener" "web-443" {
 
 resource "aws_lb_target_group" "tcp-2222" {
   name = "${var.environment_name}-tcp-2222-tg"
-  port = 443
+  port = 2222
   protocol = "TCP"
   vpc_id = data.aws_vpc.concourse.id
   health_check {
