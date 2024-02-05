@@ -41,7 +41,7 @@ resource "aws_lb_target_group" "web-80" {
 
 resource "aws_lb_listener" "web-80" {
   load_balancer_arn = aws_lb.tas.arn
-  port = 443
+  port = 80
   protocol = "TCP"
   default_action {
     type = "forward"
