@@ -157,6 +157,18 @@ data "aws_iam_policy_document" "tas-cc-s3" {
       "${aws_s3_bucket.droplets-backup.arn}/*",
     ]
   }
+  statement {
+    sid     = "RequiredIfUsingCustomKMSKeys"
+    effect  = "Allow"
+    actions = [
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:CreateGrant",
+      "kms:DescribeKey*",
+      "kms:Decrypt*",
+    ]
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_policy" "tas-cc-s3" {
