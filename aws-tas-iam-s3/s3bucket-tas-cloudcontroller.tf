@@ -37,7 +37,7 @@ resource "aws_kms_key" "tas-cc" {
 
 resource "aws_kms_alias" "tas-cc-alias" {
   name = "alias/${var.environment_name}-tas-cc"
-  target_key_id = aws_kms_key.pipeline.key_id
+  target_key_id = aws_kms_key.tas-cc.key_id
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "packages" {
