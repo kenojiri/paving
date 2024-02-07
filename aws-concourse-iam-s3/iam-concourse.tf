@@ -161,6 +161,15 @@ data "aws_iam_policy_document" "concourse" {
       "arn:aws:secretsmanager:*:*:secret:__concourse-health-check-??????",
     ]
   }
+
+  statement {
+    sid    = "AllowInstanceProfileToAssumeCrossAccountRole"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+    resources = [aws_iam_role.concourse_prod.arn]
+  }
 }
 
 resource "aws_iam_policy" "concourse" {
