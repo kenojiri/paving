@@ -8,6 +8,7 @@ locals {
     pipeline_bucket_kms_key_id = aws_kms_key.pipeline.key_id
     backup_bucket_name = aws_s3_bucket.backup.bucket
     backup_bucket_kms_key_id = aws_kms_key.backup.key_id
+    concourse_prod_role_arn = aws_iam_role.concourse_prod.arn
   }
 }
 output "config" {

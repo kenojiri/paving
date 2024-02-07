@@ -2,6 +2,7 @@
 ## - environment_name
 
 resource "aws_iam_role" "opsman" {
+  provider = aws.sandbox_account
   name = "${var.environment_name}-opsman-role"
 
   lifecycle {
@@ -29,6 +30,7 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "opsman" {
+  provider = aws.sandbox_account
   name = "${var.environment_name}-opsman"
   role = aws_iam_role.opsman.name
   lifecycle {
@@ -91,11 +93,13 @@ data "aws_iam_policy_document" "opsman" {
 }
 
 resource "aws_iam_policy" "opsman" {
+  provider = aws.sandbox_account
   name   = "${var.environment_name}-opsman-policy"
   policy = data.aws_iam_policy_document.opsman.json
 }
 
 resource "aws_iam_role_policy_attachment" "opsman" {
+  provider = aws.sandbox_account
   role       = aws_iam_role.opsman.name
   policy_arn = aws_iam_policy.opsman.arn
 }

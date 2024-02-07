@@ -2,6 +2,7 @@
 ## - environment_name
 
 resource "aws_iam_role" "concourse" {
+  provider = aws.sandbox_account
   name = "${var.environment_name}-concourse-role"
 
   lifecycle {
@@ -29,6 +30,7 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "concourse" {
+  provider = aws.sandbox_account
   name = "${var.environment_name}-concourse"
   role = aws_iam_role.concourse.name
   lifecycle {
@@ -162,11 +164,13 @@ data "aws_iam_policy_document" "concourse" {
 }
 
 resource "aws_iam_policy" "concourse" {
+  provider = aws.sandbox_account
   name   = "${var.environment_name}-concourse-role"
   policy = data.aws_iam_policy_document.concourse.json
 }
 
 resource "aws_iam_role_policy_attachment" "concourse" {
+  provider = aws.sandbox_account
   role       = aws_iam_role.concourse.name
   policy_arn = aws_iam_policy.concourse.arn
 }

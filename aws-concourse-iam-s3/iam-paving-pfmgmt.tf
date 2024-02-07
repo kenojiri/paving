@@ -14,6 +14,7 @@ data "aws_iam_policy_document" "assume-role-policy" {
 }
 
 resource "aws_iam_role" "paving-pfmgmt" {
+  provider = aws.sandbox_account
   name = "paving-pfmgmt-role"
   lifecycle {
     create_before_destroy = true
@@ -143,11 +144,13 @@ data "aws_iam_policy_document" "paving-pfmgmt" {
 }
 
 resource "aws_iam_policy" "paving-pfmgmt" {
+  provider = aws.sandbox_account
   name   = "paving-pfmgmt"
   policy = data.aws_iam_policy_document.paving-pfmgmt.json
 }
 
 resource "aws_iam_role_policy_attachment" "paving-pfmgmt" {
+  provider = aws.sandbox_account
   role       = aws_iam_role.paving-pfmgmt.name
   policy_arn = aws_iam_policy.paving-pfmgmt.arn
 }

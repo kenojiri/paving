@@ -1,12 +1,25 @@
-variable "access_key_id" {
+variable "sandbox_access_key_id" {
   type = string
 }
 
-variable "secret_access_key" {
+variable "sandbox_secret_access_key" {
   type = string
 }
 
-variable "session_token" {
+variable "sandbox_session_token" {
+  type = string
+  default = ""
+}
+
+variable "prod_access_key_id" {
+  type = string
+}
+
+variable "prod_secret_access_key" {
+  type = string
+}
+
+variable "prod_session_token" {
   type = string
   default = ""
 }
