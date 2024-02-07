@@ -3,6 +3,11 @@ variable "region" {
   description = "target AWS region."
 }
 
+variable "assuming_role_arn" {
+  type = string
+  description = "IAM role to be assumed for this Terraform script."
+}
+
 variable "environment_name" {
   type = string
   description = "This name is appended as a prefix to the subdomain for this environment."
