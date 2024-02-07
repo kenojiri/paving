@@ -6,18 +6,7 @@ resource "aws_lb" "concourse" {
   load_balancer_type = "network"
   internal = true
   enable_cross_zone_load_balancing = true
-  subnet_mapping {
-    subnet_id = data.aws_subnet.elb-a.id
-    private_ipv4_address = "${cidrhost(data.aws_subnet.elb-a.cidr_block, 10)}"
-  }
-  subnet_mapping {
-    subnet_id = data.aws_subnet.elb-b.id
-    private_ipv4_address = "${cidrhost(data.aws_subnet.elb-b.cidr_block, 10)}"
-  }
-  subnet_mapping {
-    subnet_id = data.aws_subnet.elb-c.id
-    private_ipv4_address = "${cidrhost(data.aws_subnet.elb-c.cidr_block, 10)}"
-  }
+  subnets = [data.aws_subnet.elb-a.id,data.aws_subnet.elb-b.id,data.aws_subnet.elb-c.id]
 }
 
 resource "aws_lb_target_group" "web-443" {
