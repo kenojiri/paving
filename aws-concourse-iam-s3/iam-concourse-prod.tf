@@ -7,6 +7,7 @@ data "aws_iam_policy_document" "concourse_assume_role_policy" {
     principals {
       type        = "Service"
       identifiers = ["ec2.amazonaws.com"]
+    }
     principals {
       type        = "AWS"
       identifiers = [aws_iam_role.concourse.arn]

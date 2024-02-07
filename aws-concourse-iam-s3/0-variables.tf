@@ -32,3 +32,7 @@ variable "region" {
 variable "environment_name" {
   type = string
 }
+
+variable "paving_pfmgmt_allowed_iam_user_arns" {
+  type = list
+}
