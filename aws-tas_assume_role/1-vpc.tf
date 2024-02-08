@@ -4,6 +4,7 @@
 ## - elb_subnet_ids
 
 data "aws_vpc" "foundation" {
+  provider = aws.target
   filter {
     name   = "tag:Name"
     values = [var.vpc_name]
@@ -11,22 +12,28 @@ data "aws_vpc" "foundation" {
 }
 
 data "aws_subnet" "a" {
+  provider = aws.target
   id = var.subnet_ids[0]
 }
 data "aws_subnet" "b" {
+  provider = aws.target
   id = var.subnet_ids[1]
 }
 data "aws_subnet" "c" {
+  provider = aws.target
   id = var.subnet_ids[2]
 }
 
 data "aws_subnet" "elb-a" {
+  provider = aws.target
   id = var.elb_subnet_ids[0]
 }
 data "aws_subnet" "elb-b" {
+  provider = aws.target
   id = var.elb_subnet_ids[1]
 }
 data "aws_subnet" "elb-c" {
+  provider = aws.target
   id = var.elb_subnet_ids[2]
 }
 

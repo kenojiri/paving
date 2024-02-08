@@ -10,6 +10,7 @@ resource "random_id" "db_passwd" {
 }
 
 resource "aws_db_subnet_group" "rds" {
+  provider = aws.target
   name       = "${var.environment_name}-rds-subnet-group"
   subnet_ids = var.elb_subnet_ids
   tags = {
@@ -18,6 +19,7 @@ resource "aws_db_subnet_group" "rds" {
 }
 
 resource "aws_db_instance" "rds" {
+  provider = aws.target
   identifier_prefix = "${var.environment_name}-rds-"
   allocated_storage = var.db_storage_in_gib
   storage_type = "gp3"

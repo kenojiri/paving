@@ -14,6 +14,12 @@ terraform {
 }
 
 provider "aws" {
+  alias = "base"
+  region = var.region
+}
+
+provider "aws" {
+  alias = "target"
   region = var.region
   assume_role {
     role_arn = var.assuming_role_arn

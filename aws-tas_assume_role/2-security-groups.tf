@@ -2,6 +2,7 @@
 ## - environment_name
 
 resource "aws_security_group" "plane" {
+  provider = aws.target
   name   = "${var.environment_name}-plane-sg"
   vpc_id = data.aws_vpc.foundation.id
 
@@ -23,6 +24,7 @@ resource "aws_security_group" "plane" {
 }
 
 resource "aws_security_group" "opsman" {
+  provider = aws.target
   name   = "${var.environment_name}-opsman-sg"
   vpc_id = data.aws_vpc.foundation.id
 
@@ -58,6 +60,7 @@ resource "aws_security_group" "opsman" {
 }
 
 resource "aws_security_group" "web_lb" {
+  provider = aws.target
   name   = "${var.environment_name}-web-lb-sg"
   vpc_id = data.aws_vpc.foundation.id
 
@@ -86,6 +89,7 @@ resource "aws_security_group" "web_lb" {
 }
 
 resource "aws_security_group" "tas_router" {
+  provider = aws.target
   name   = "${var.environment_name}-tas-router-sg"
   vpc_id = data.aws_vpc.foundation.id
 
@@ -114,6 +118,7 @@ resource "aws_security_group" "tas_router" {
 }
 
 resource "aws_security_group" "tas_sshproxy" {
+  provider = aws.target
   name   = "${var.environment_name}-tas-sshproxy-sg"
   vpc_id = data.aws_vpc.foundation.id
 
@@ -135,6 +140,7 @@ resource "aws_security_group" "tas_sshproxy" {
 }
 
 resource "aws_security_group" "tas_tcprouter" {
+  provider = aws.target
   name   = "${var.environment_name}-tas-tcprouter-sg"
   vpc_id = data.aws_vpc.foundation.id
 
@@ -170,6 +176,7 @@ resource "aws_security_group" "tas_tcprouter" {
 }
 
 resource "aws_security_group" "mysql" {
+  provider = aws.target
   name   = "${var.environment_name}-mysql-sg"
   vpc_id = data.aws_vpc.foundation.id
 
