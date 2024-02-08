@@ -36,7 +36,13 @@ resource "aws_lb_target_group" "web-443" {
   protocol = "TCP"
   vpc_id = data.aws_vpc.foundation.id
   health_check {
-    protocol = "TCP"
+    protocol = "HTTP"
+    path = "/health"
+    port = 8080
+    healthy_threshold = 5
+    unhealthy_threshold = 2
+    timeout = 5
+    interval = 30
   }
 }
 
@@ -57,17 +63,6 @@ resource "aws_lb_listener_certificate" "web-443" {
   certificate_arn = aws_acm_certificate.web_lb.arn
 }
 
-resource "aws_lb_target_group" "web-4443" {
-  provider = aws.target
-  name = "${var.environment_name}-web-4443-tg"
-  port = 4443
-  protocol = "TCP"
-  vpc_id = data.aws_vpc.foundation.id
-  health_check {
-    protocol = "TCP"
-  }
-}
-
 resource "aws_lb_listener" "web-4443" {
   provider = aws.target
   load_balancer_arn = aws_lb.tas_alb.arn
@@ -75,7 +70,7 @@ resource "aws_lb_listener" "web-4443" {
   protocol = "TCP"
   default_action {
     type = "forward"
-    target_group_arn = aws_lb_target_group.web-4443.arn
+    target_group_arn = aws_lb_target_group.web-443.arn
   }
 }
 
@@ -102,6 +97,10 @@ resource "aws_lb_target_group" "ssh-2222" {
   vpc_id = data.aws_vpc.foundation.id
   health_check {
     protocol = "TCP"
+    interval = 30
+    timeout = 29
+    healthy_threshold = 6
+    unhealthy_threshold = 6
   }
 }
 
@@ -167,7 +166,14 @@ resource "aws_lb_target_group" "tcp-1024" {
   protocol = "TCP"
   vpc_id = data.aws_vpc.foundation.id
   health_check {
-    protocol = "TCP"
+    protocol = "HTTP"
+    path = "/health"
+    port = 80
+    timeout = 5
+    healthy_threshold = 6
+    unhealthy_threshold = 6
+    timeout = 10
+    interval = 30
   }
 }
 
@@ -189,7 +195,14 @@ resource "aws_lb_target_group" "tcp-15692" {
   protocol = "TCP"
   vpc_id = data.aws_vpc.foundation.id
   health_check {
-    protocol = "TCP"
+    protocol = "HTTP"
+    path = "/health"
+    port = 80
+    timeout = 5
+    healthy_threshold = 6
+    unhealthy_threshold = 6
+    timeout = 10
+    interval = 30
   }
 }
 
@@ -218,7 +231,14 @@ resource "aws_lb_target_group" "rabbitmq" {
   vpc_id   = data.aws_vpc.foundation.id
 
   health_check {
-    protocol = "TCP"
+    protocol = "HTTP"
+    path = "/health"
+    port = 80
+    timeout = 5
+    healthy_threshold = 6
+    unhealthy_threshold = 6
+    timeout = 10
+    interval = 30
   }
 }
 
