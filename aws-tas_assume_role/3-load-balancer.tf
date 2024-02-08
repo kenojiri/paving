@@ -33,7 +33,7 @@ resource "aws_lb_target_group" "web-443" {
   provider = aws.target
   name = "${var.environment_name}-web-443-tg"
   port = 443
-  protocol = "TCP"
+  protocol = "HTTPS"
   vpc_id = data.aws_vpc.foundation.id
   health_check {
     protocol = "HTTP"
@@ -50,34 +50,24 @@ resource "aws_lb_listener" "web-443" {
   provider = aws.target
   load_balancer_arn = aws_lb.tas_alb.arn
   port = 443
-  protocol = "TCP"
+  protocol = "HTTPS"
+  certificate_arn = aws_acm_certificate.web_lb.arn
   default_action {
     type = "forward"
     target_group_arn = aws_lb_target_group.web-443.arn
   }
-}
-
-resource "aws_lb_listener_certificate" "web-443" {
-  provider = aws.target
-  listener_arn    = aws_lb_listener.web-443.arn
-  certificate_arn = aws_acm_certificate.web_lb.arn
 }
 
 resource "aws_lb_listener" "web-4443" {
   provider = aws.target
   load_balancer_arn = aws_lb.tas_alb.arn
   port = 4443
-  protocol = "TCP"
+  protocol = "HTTPS"
+  certificate_arn = aws_acm_certificate.web_lb.arn
   default_action {
     type = "forward"
     target_group_arn = aws_lb_target_group.web-443.arn
   }
-}
-
-resource "aws_lb_listener_certificate" "web-4443" {
-  provider = aws.target
-  listener_arn    = aws_lb_listener.web-4443.arn
-  certificate_arn = aws_acm_certificate.web_lb.arn
 }
 
 resource "aws_lb" "tas_nlb" {
