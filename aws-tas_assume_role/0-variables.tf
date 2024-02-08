@@ -28,6 +28,11 @@ variable "elb_subnet_ids" {
   description = "The Platform Management Plane subnet IDs for ELB."
 }
 
+variable "https_listener_cert_secret_arn" {
+  type = string
+  description = "AWS Secrets Manager secret ARN of TLS ceritficate configured in HTTPS listener of Application Load Balancer for TAS."
+}
+
 variable "db_username" {
   type = string
   default = "dbadmin"

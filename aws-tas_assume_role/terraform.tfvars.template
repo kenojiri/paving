@@ -4,6 +4,7 @@ vpc_name = "platform-management"
 subnet_ids = ["subnet-XXXXXXXX","subnet-YYYYYYYY","subnet-ZZZZZZZZ"]
 elb_subnet_ids = ["subnet-XXXXXXXXXX","subnet-YYYYYYYYYY","subnet-ZZZZZZZZZZ"]
 environment_name = "sandbox"
+https_listener_cert_secret_arn = "arn:aws:secretsmanager:us-east-1:XXXXXXXXXXXX:secret:/concourse/sandbox/web_lb_https_listener_cert-XXXXXX"
 #db_username = "dbadmin"
 #db_storage_in_gib = 20
 #db_instance_class = "db.m4.large"
