@@ -70,130 +70,130 @@ resource "aws_lb_listener" "web-4443" {
   }
 }
 
-resource "aws_lb" "tas_nlb" {
-  provider = aws.target
-  name = "${var.environment_name}-tas-tcp-lb"
-  load_balancer_type = "network"
-  internal = true
-  enable_cross_zone_load_balancing = true
-  subnets = [data.aws_subnet.elb-a.id,data.aws_subnet.elb-b.id,data.aws_subnet.elb-c.id]
-}
-
-resource "aws_lb_target_group" "ssh-2222" {
-  provider = aws.target
-  name = "${var.environment_name}-ssh-2222-tg"
-  port = 2222
-  protocol = "TCP"
-  vpc_id = data.aws_vpc.foundation.id
-  health_check {
-    protocol = "TCP"
-    interval = 30
-    timeout = 29
-    healthy_threshold = 6
-    unhealthy_threshold = 6
-  }
-}
-
-resource "aws_lb_listener" "ssh-2222" {
-  provider = aws.target
-  load_balancer_arn = aws_lb.tas_nlb.arn
-  port = 2222
-  protocol = "TCP"
-  default_action {
-    type = "forward"
-    target_group_arn = aws_lb_target_group.ssh-2222.arn
-  }
-}
-
-resource "aws_lb_target_group" "tcp-443" {
-  provider = aws.target
-  name = "${var.environment_name}-tcp-443-tg"
-  port = 443
-  protocol = "TCP"
-  vpc_id = data.aws_vpc.foundation.id
-  health_check {
-    protocol = "TCP"
-  }
-}
-
-resource "aws_lb_listener" "tcp-443" {
-  provider = aws.target
-  load_balancer_arn = aws_lb.tas_nlb.arn
-  port = 443
-  protocol = "TCP"
-  default_action {
-    type = "forward"
-    target_group_arn = aws_lb_target_group.tcp-443.arn
-  }
-}
-
-resource "aws_lb_listener" "tcp-4443" {
-  provider = aws.target
-  load_balancer_arn = aws_lb.tas_nlb.arn
-  port = 4443
-  protocol = "TCP"
-  default_action {
-    type = "forward"
-    target_group_arn = aws_lb_target_group.tcp-443.arn
-  }
-}
-
-resource "aws_lb_target_group" "tcprouter" {
-  provider = aws.target
-  name = "${var.environment_name}-tcprouter-tg"
-  port = 1024
-  protocol = "TCP"
-  vpc_id = data.aws_vpc.foundation.id
-  health_check {
-    protocol = "HTTP"
-    path = "/health"
-    port = 80
-    healthy_threshold = 6
-    unhealthy_threshold = 6
-    timeout = 10
-    interval = 30
-  }
-}
-
-resource "aws_lb_listener" "tcp-1024" {
-  provider = aws.target
-  load_balancer_arn = aws_lb.tas_nlb.arn
-  port = 1024
-  protocol = "TCP"
-  default_action {
-    type = "forward"
-    target_group_arn = aws_lb_target_group.tcprouter.arn
-  }
-}
-
-resource "aws_lb_listener" "tcp-15692" {
-  provider = aws.target
-  load_balancer_arn = aws_lb.tas_nlb.arn
-  port = 15692
-  protocol = "TCP"
-  default_action {
-    type = "forward"
-    target_group_arn = aws_lb_target_group.tcprouter.arn
-  }
-}
-
-locals {
-  rabbitmq_port_count = 40
-}
-
-resource "aws_lb_listener" "rabbitmq" {
-  provider = aws.target
-  load_balancer_arn = aws_lb.tas_nlb.arn
-  port              = 26770 + count.index
-  protocol          = "TCP"
-
-  count = local.rabbitmq_port_count
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.tcprouter.arn
-  }
-}
+#resource "aws_lb" "tas_nlb" {
+#  provider = aws.target
+#  name = "${var.environment_name}-tas-tcp-lb"
+#  load_balancer_type = "network"
+#  internal = true
+#  enable_cross_zone_load_balancing = true
+#  subnets = [data.aws_subnet.elb-a.id,data.aws_subnet.elb-b.id,data.aws_subnet.elb-c.id]
+#}
+#
+#resource "aws_lb_target_group" "ssh-2222" {
+#  provider = aws.target
+#  name = "${var.environment_name}-ssh-2222-tg"
+#  port = 2222
+#  protocol = "TCP"
+#  vpc_id = data.aws_vpc.foundation.id
+#  health_check {
+#    protocol = "TCP"
+#    interval = 30
+#    timeout = 29
+#    healthy_threshold = 6
+#    unhealthy_threshold = 6
+#  }
+#}
+#
+#resource "aws_lb_listener" "ssh-2222" {
+#  provider = aws.target
+#  load_balancer_arn = aws_lb.tas_nlb.arn
+#  port = 2222
+#  protocol = "TCP"
+#  default_action {
+#    type = "forward"
+#    target_group_arn = aws_lb_target_group.ssh-2222.arn
+#  }
+#}
+#
+#resource "aws_lb_target_group" "tcp-443" {
+#  provider = aws.target
+#  name = "${var.environment_name}-tcp-443-tg"
+#  port = 443
+#  protocol = "TCP"
+#  vpc_id = data.aws_vpc.foundation.id
+#  health_check {
+#    protocol = "TCP"
+#  }
+#}
+#
+#resource "aws_lb_listener" "tcp-443" {
+#  provider = aws.target
+#  load_balancer_arn = aws_lb.tas_nlb.arn
+#  port = 443
+#  protocol = "TCP"
+#  default_action {
+#    type = "forward"
+#    target_group_arn = aws_lb_target_group.tcp-443.arn
+#  }
+#}
+#
+#resource "aws_lb_listener" "tcp-4443" {
+#  provider = aws.target
+#  load_balancer_arn = aws_lb.tas_nlb.arn
+#  port = 4443
+#  protocol = "TCP"
+#  default_action {
+#    type = "forward"
+#    target_group_arn = aws_lb_target_group.tcp-443.arn
+#  }
+#}
+#
+#resource "aws_lb_target_group" "tcprouter" {
+#  provider = aws.target
+#  name = "${var.environment_name}-tcprouter-tg"
+#  port = 1024
+#  protocol = "TCP"
+#  vpc_id = data.aws_vpc.foundation.id
+#  health_check {
+#    protocol = "HTTP"
+#    path = "/health"
+#    port = 80
+#    healthy_threshold = 6
+#    unhealthy_threshold = 6
+#    timeout = 10
+#    interval = 30
+#  }
+#}
+#
+#resource "aws_lb_listener" "tcp-1024" {
+#  provider = aws.target
+#  load_balancer_arn = aws_lb.tas_nlb.arn
+#  port = 1024
+#  protocol = "TCP"
+#  default_action {
+#    type = "forward"
+#    target_group_arn = aws_lb_target_group.tcprouter.arn
+#  }
+#}
+#
+#resource "aws_lb_listener" "tcp-15692" {
+#  provider = aws.target
+#  load_balancer_arn = aws_lb.tas_nlb.arn
+#  port = 15692
+#  protocol = "TCP"
+#  default_action {
+#    type = "forward"
+#    target_group_arn = aws_lb_target_group.tcprouter.arn
+#  }
+#}
+#
+#locals {
+#  rabbitmq_port_count = 40
+#}
+#
+#resource "aws_lb_listener" "rabbitmq" {
+#  provider = aws.target
+#  load_balancer_arn = aws_lb.tas_nlb.arn
+#  port              = 26770 + count.index
+#  protocol          = "TCP"
+#
+#  count = local.rabbitmq_port_count
+#
+#  default_action {
+#    type             = "forward"
+#    target_group_arn = aws_lb_target_group.tcprouter.arn
+#  }
+#}
 
 ## output
 ## - tas_web_lb_external_fqdn = aws_lb.tas_alb.dns_name
