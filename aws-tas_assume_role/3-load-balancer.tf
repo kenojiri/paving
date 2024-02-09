@@ -138,9 +138,10 @@ resource "aws_lb_listener" "tcp-4443" {
   }
 }
 
-resource "aws_lb_target_group" "tcprouter" {
+resource "aws_lb_target_group" "tcp-1024" {
   provider = aws.target
-  name = "${var.environment_name}-tcprouter-tg"
+  name = "${var.environment_name}-tcp-1024-tg"
+  port = 1024
   protocol = "TCP"
   vpc_id = data.aws_vpc.foundation.id
   health_check {
@@ -161,7 +162,24 @@ resource "aws_lb_listener" "tcp-1024" {
   protocol = "TCP"
   default_action {
     type = "forward"
-    target_group_arn = aws_lb_target_group.tcprouter.arn
+    target_group_arn = aws_lb_target_group.tcp-1024.arn
+  }
+}
+
+resource "aws_lb_target_group" "tcp-15692" {
+  provider = aws.target
+  name = "${var.environment_name}-tcp-15692-tg"
+  port = 15692
+  protocol = "TCP"
+  vpc_id = data.aws_vpc.foundation.id
+  health_check {
+    protocol = "HTTP"
+    path = "/health"
+    port = 80
+    healthy_threshold = 6
+    unhealthy_threshold = 6
+    timeout = 10
+    interval = 30
   }
 }
 
@@ -172,7 +190,7 @@ resource "aws_lb_listener" "tcp-15692" {
   protocol = "TCP"
   default_action {
     type = "forward"
-    target_group_arn = aws_lb_target_group.tcprouter.arn
+    target_group_arn = aws_lb_target_group.tcp-15692.arn
   }
 }
 
@@ -180,17 +198,35 @@ locals {
   rabbitmq_port_count = 40
 }
 
+resource "aws_lb_target_group" "rabbitmq" {
+  count = local.rabbitmq_port_count
+
+  provider = aws.target
+  name = "${var.environment_name}-rabbitmq-${26770 + count.index}-tg"
+  port = 26770 + count.index
+  protocol = "TCP"
+  vpc_id = data.aws_vpc.foundation.id
+  health_check {
+    protocol = "HTTP"
+    path = "/health"
+    port = 80
+    healthy_threshold = 6
+    unhealthy_threshold = 6
+    timeout = 10
+    interval = 30
+  }
+}
+
 resource "aws_lb_listener" "rabbitmq" {
+  count = local.rabbitmq_port_count
+
   provider = aws.target
   load_balancer_arn = aws_lb.tas_nlb.arn
   port              = 26770 + count.index
   protocol          = "TCP"
-
-  count = local.rabbitmq_port_count
-
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.tcprouter.arn
+    target_group_arn = element(aws_lb_target_group.rabbitmq[*].arn, count.index)
   }
 }
 
@@ -199,4 +235,4 @@ resource "aws_lb_listener" "rabbitmq" {
 ## - tas_tcp_lb_external_fqdn = aws_lb.tas_nlb.dns_name
 ## - tas_router_https_target_group_name = aws_lb_target_group.web-443.name
 ## - tas_sshproxy_target_group_name = aws_lb_target_group.ssh-2222.name
-## - tas_tcprouter_target_group_name = aws_lb_target_group.tcprouter.name
+## - tas_tcprouter_target_group_names = [aws_lb_target_group.tcp-1024.name,aws_lb_target_group.tcp-15692.name,aws_lb_target_group.rabbitmq[*].name]

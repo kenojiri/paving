@@ -21,7 +21,7 @@ locals {
     tas_tcp_lb_external_fqdn = aws_lb.tas_nlb.dns_name
     tas_router_https_target_group_name = aws_lb_target_group.web-443.name
     tas_sshproxy_target_group_name = aws_lb_target_group.ssh-2222.name
-    tas_tcprouter_target_group_name = aws_lb_target_group.tcprouter.name
+    tas_tcprouter_target_group_names = [aws_lb_target_group.tcp-1024.name,aws_lb_target_group.tcp-15692.name,aws_lb_target_group.rabbitmq[*].name]
   }
 }
 
