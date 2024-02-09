@@ -20,7 +20,6 @@ locals {
     tas_web_lb_external_fqdn = aws_lb.tas_alb.dns_name
     tas_tcp_lb_external_fqdn = aws_lb.tas_nlb.dns_name
     tas_router_https_target_group_name = aws_lb_target_group.web-443.name
-    tas_router_tcp4443_target_group_name = aws_lb_target_group.web-4443.name
     tas_sshproxy_target_group_name = aws_lb_target_group.ssh-2222.name
   }
 }

@@ -159,7 +159,6 @@ resource "aws_lb_target_group" "tcp-1024" {
     protocol = "HTTP"
     path = "/health"
     port = 80
-    timeout = 5
     healthy_threshold = 6
     unhealthy_threshold = 6
     timeout = 10
@@ -188,7 +187,6 @@ resource "aws_lb_target_group" "tcp-15692" {
     protocol = "HTTP"
     path = "/health"
     port = 80
-    timeout = 5
     healthy_threshold = 6
     unhealthy_threshold = 6
     timeout = 10
@@ -224,7 +222,6 @@ resource "aws_lb_target_group" "rabbitmq" {
     protocol = "HTTP"
     path = "/health"
     port = 80
-    timeout = 5
     healthy_threshold = 6
     unhealthy_threshold = 6
     timeout = 10
