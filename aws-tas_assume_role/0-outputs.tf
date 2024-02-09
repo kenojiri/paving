@@ -18,10 +18,10 @@ locals {
     tas_sshproxy_security_group_ids = [ aws_security_group.tas_sshproxy.id, aws_security_group.plane.id]
     tas_tcprouter_security_group_ids = [ aws_security_group.tas_tcprouter.id, aws_security_group.plane.id]
     tas_web_lb_external_fqdn = aws_lb.tas_alb.dns_name
-    #tas_tcp_lb_external_fqdn = aws_lb.tas_nlb.dns_name
+    tas_tcp_lb_external_fqdn = aws_lb.tas_nlb.dns_name
     tas_router_https_target_group_name = aws_lb_target_group.web-443.name
-    #tas_sshproxy_target_group_name = aws_lb_target_group.ssh-2222.name
-    #tas_tcprouter_target_group_name = aws_lb_target_group.tcprouter.name
+    tas_sshproxy_target_group_name = aws_lb_target_group.ssh-2222.name
+    tas_tcprouter_target_group_name = aws_lb_target_group.tcprouter.name
   }
 }
 
