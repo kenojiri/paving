@@ -13,7 +13,7 @@ data "aws_secretsmanager_secret_version" "cert-secret-version" {
 resource "aws_acm_certificate" "web_lb" {
   private_key       = jsondecode(data.aws_secretsmanager_secret_version.cert-secret-version.secret_string)["private_key"]
   certificate_body  = jsondecode(data.aws_secretsmanager_secret_version.cert-secret-version.secret_string)["certificate_body"]
-  certificate_chain = jsondecode(data.aws_secretsmanager_secret_version.cert-secret-version.secret_string)["cert_chain"]
+  certificate_chain = jsondecode(data.aws_secretsmanager_secret_version.cert-secret-version.secret_string)["certificate_chain"]
 }
 
 resource "aws_lb" "tas_alb" {
