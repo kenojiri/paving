@@ -3,24 +3,20 @@
 ## - https_listener_cert_secret_arn
 
 data "aws_secretsmanager_secret" "cert-secret" {
-  provider = aws.base
   arn      = var.https_listener_cert_secret_arn
 }
 
 data "aws_secretsmanager_secret_version" "cert-secret-version" {
-  provider = aws.base
   secret_id = data.aws_secretsmanager_secret.cert-secret.id
 }
 
 resource "aws_acm_certificate" "web_lb" {
-  provider = aws.target
   private_key       = jsondecode(data.aws_secretsmanager_secret_version.cert-secret-version.secret_string)["private_key"]
   certificate_body  = jsondecode(data.aws_secretsmanager_secret_version.cert-secret-version.secret_string)["certificate_body"]
   certificate_chain = jsondecode(data.aws_secretsmanager_secret_version.cert-secret-version.secret_string)["ca_chain"]
 }
 
 resource "aws_lb" "tas_alb" {
-  provider = aws.target
   name = "${var.environment_name}-tas-web-lb"
   load_balancer_type = "application"
   internal = true
@@ -30,7 +26,6 @@ resource "aws_lb" "tas_alb" {
 }
 
 resource "aws_lb_target_group" "web-443" {
-  provider = aws.target
   name = "${var.environment_name}-web-443-tg"
   port = 443
   protocol = "HTTPS"
@@ -47,7 +42,6 @@ resource "aws_lb_target_group" "web-443" {
 }
 
 resource "aws_lb_listener" "web-443" {
-  provider = aws.target
   load_balancer_arn = aws_lb.tas_alb.arn
   port = 443
   protocol = "HTTPS"
@@ -59,7 +53,6 @@ resource "aws_lb_listener" "web-443" {
 }
 
 resource "aws_lb_listener" "web-4443" {
-  provider = aws.target
   load_balancer_arn = aws_lb.tas_alb.arn
   port = 4443
   protocol = "HTTPS"
@@ -71,7 +64,6 @@ resource "aws_lb_listener" "web-4443" {
 }
 
 resource "aws_lb" "tas_nlb" {
-  provider = aws.target
   name = "${var.environment_name}-tas-tcp-lb"
   load_balancer_type = "network"
   internal = true
@@ -80,7 +72,6 @@ resource "aws_lb" "tas_nlb" {
 }
 
 resource "aws_lb_target_group" "ssh-2222" {
-  provider = aws.target
   name = "${var.environment_name}-ssh-2222-tg"
   port = 2222
   protocol = "TCP"
@@ -95,7 +86,6 @@ resource "aws_lb_target_group" "ssh-2222" {
 }
 
 resource "aws_lb_listener" "ssh-2222" {
-  provider = aws.target
   load_balancer_arn = aws_lb.tas_nlb.arn
   port = 2222
   protocol = "TCP"
@@ -106,7 +96,6 @@ resource "aws_lb_listener" "ssh-2222" {
 }
 
 resource "aws_lb_target_group" "tcp-443" {
-  provider = aws.target
   name = "${var.environment_name}-tcp-443-tg"
   port = 443
   protocol = "TCP"
@@ -117,7 +106,6 @@ resource "aws_lb_target_group" "tcp-443" {
 }
 
 resource "aws_lb_listener" "tcp-443" {
-  provider = aws.target
   load_balancer_arn = aws_lb.tas_nlb.arn
   port = 443
   protocol = "TCP"
@@ -128,7 +116,6 @@ resource "aws_lb_listener" "tcp-443" {
 }
 
 resource "aws_lb_listener" "tcp-4443" {
-  provider = aws.target
   load_balancer_arn = aws_lb.tas_nlb.arn
   port = 4443
   protocol = "TCP"
@@ -139,7 +126,6 @@ resource "aws_lb_listener" "tcp-4443" {
 }
 
 resource "aws_lb_target_group" "tcp-1024" {
-  provider = aws.target
   name = "${var.environment_name}-tcp-1024-tg"
   port = 1024
   protocol = "TCP"
@@ -156,7 +142,6 @@ resource "aws_lb_target_group" "tcp-1024" {
 }
 
 resource "aws_lb_listener" "tcp-1024" {
-  provider = aws.target
   load_balancer_arn = aws_lb.tas_nlb.arn
   port = 1024
   protocol = "TCP"
@@ -167,7 +152,6 @@ resource "aws_lb_listener" "tcp-1024" {
 }
 
 resource "aws_lb_target_group" "tcp-15692" {
-  provider = aws.target
   name = "${var.environment_name}-tcp-15692-tg"
   port = 15692
   protocol = "TCP"
@@ -184,7 +168,6 @@ resource "aws_lb_target_group" "tcp-15692" {
 }
 
 resource "aws_lb_listener" "tcp-15692" {
-  provider = aws.target
   load_balancer_arn = aws_lb.tas_nlb.arn
   port = 15692
   protocol = "TCP"
@@ -201,7 +184,6 @@ locals {
 resource "aws_lb_target_group" "rabbitmq" {
   count = local.rabbitmq_port_count
 
-  provider = aws.target
   name = "${var.environment_name}-rabbitmq-${26770 + count.index}-tg"
   port = 26770 + count.index
   protocol = "TCP"
@@ -220,7 +202,6 @@ resource "aws_lb_target_group" "rabbitmq" {
 resource "aws_lb_listener" "rabbitmq" {
   count = local.rabbitmq_port_count
 
-  provider = aws.target
   load_balancer_arn = aws_lb.tas_nlb.arn
   port              = 26770 + count.index
   protocol          = "TCP"

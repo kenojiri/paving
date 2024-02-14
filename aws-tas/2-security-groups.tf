@@ -57,6 +57,34 @@ resource "aws_security_group" "opsman" {
   tags = { "Name" = "${var.environment_name}-opsman-sg" }
 }
 
+resource "aws_security_group" "web_lb" {
+  name   = "${var.environment_name}-web-lb-sg"
+  vpc_id = data.aws_vpc.foundation.id
+
+  ingress {
+    cidr_blocks = ["10.0.0.0/16","100.99.0.0/16"]
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+  }
+
+  ingress {
+    cidr_blocks = ["10.0.0.0/16","100.99.0.0/16"]
+    protocol    = "tcp"
+    from_port   = 4443
+    to_port     = 4443
+  }
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+  }
+
+  tags = { "Name" = "${var.environment_name}-web-lb-sg" }
+}
+
 resource "aws_security_group" "tas_router" {
   name   = "${var.environment_name}-tas-router-sg"
   vpc_id = data.aws_vpc.foundation.id
