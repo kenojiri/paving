@@ -116,17 +116,7 @@ data "aws_iam_policy_document" "tas-cc-s3" {
     sid     = "S3Permissions"
     effect  = "Allow"
     actions = [
-      "s3:ListBucket",
-      "s3:*Object",
-    ]
-    resources = ["*"]
-  }
-
-  statement {
-    sid = "S3BucketPermissions"
-    effect = "Allow"
-    actions = [
-      "s3:ListBucket",
+      "s3:*"
     ]
     resources = [
       aws_s3_bucket.packages.arn,
@@ -138,25 +128,7 @@ data "aws_iam_policy_document" "tas-cc-s3" {
       aws_s3_bucket.droplets-backup.arn,
     ]
   }
-  statement {
-    sid = "S3ObjectPermissions"
-    effect  = "Allow"
-    actions = [
-      "s3:PutObject",
-      "s3:PutObjectAcl",
-      "s3:GetObject",
-      "s3:GetObjectTagging",
-    ]
-    resources = [
-      "${aws_s3_bucket.packages.arn}/*",
-      "${aws_s3_bucket.resources.arn}/*",
-      "${aws_s3_bucket.buildpacks.arn}/*",
-      "${aws_s3_bucket.droplets.arn}/*",
-      "${aws_s3_bucket.packages-backup.arn}/*",
-      "${aws_s3_bucket.buildpacks-backup.arn}/*",
-      "${aws_s3_bucket.droplets-backup.arn}/*",
-    ]
-  }
+
   statement {
     sid     = "RequiredIfUsingCustomKMSKeys"
     effect  = "Allow"
