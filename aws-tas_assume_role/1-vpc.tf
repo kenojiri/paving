@@ -11,6 +11,14 @@ data "aws_vpc" "foundation" {
   }
 }
 
+data "aws_vpc" "platform_management" {
+  provider = aws.base
+  filter {
+    name   = "tag:Name"
+    values = [var.platform_management_vpc_name]
+  }
+}
+
 data "aws_subnet" "a" {
   provider = aws.target
   id = var.subnet_ids[0]

@@ -15,17 +15,22 @@ variable "environment_name" {
 
 variable "vpc_name" {
   type = string
-  description = "The Platform Management Plane VPC name."
+  description = "The Foundation VPC name."
 }
 
 variable "subnet_ids" {
   type = list
-  description = "The Platform Management Plane subnet IDs."
+  description = "The Foundation PCFAPPS subnet IDs."
 }
 
 variable "elb_subnet_ids" {
   type = list
-  description = "The Platform Management Plane subnet IDs for ELB."
+  description = "The Foundation subnet IDs for ELB."
+}
+
+variable "platform_management_vpc_name" {
+  type = string
+  description = "The Platform Management Plane VPC name."
 }
 
 variable "https_listener_cert_secret_arn" {
