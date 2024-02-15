@@ -1,20 +1,6 @@
 ## inputs
 ## - environment_name
 
-data "aws_iam_policy_document" "concourse_assume_role_policy" {
-  statement {
-    actions = ["sts:AssumeRole"]
-    principals {
-      type        = "Service"
-      identifiers = ["ec2.amazonaws.com"]
-    }
-    principals {
-      type        = "AWS"
-      identifiers = [aws_iam_role.concourse.arn]
-    }
-  }
-}
-
 resource "aws_iam_role" "concourse_prod" {
   provider = aws.prod_account
   name = "${var.environment_name}-concourse-prod-role"

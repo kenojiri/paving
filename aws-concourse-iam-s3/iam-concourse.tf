@@ -184,5 +184,19 @@ resource "aws_iam_role_policy_attachment" "concourse" {
   policy_arn = aws_iam_policy.concourse.arn
 }
 
+data "aws_iam_policy_document" "concourse_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+    principals {
+      type        = "AWS"
+      identifiers = [aws_iam_role.concourse.arn]
+    }
+  }
+}
+
 ## outputs
 ## - concourse_iam_instance_profile_name = aws_iam_instance_profile.concourse.name

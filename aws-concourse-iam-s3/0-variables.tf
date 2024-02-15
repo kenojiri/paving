@@ -11,6 +11,19 @@ variable "sandbox_session_token" {
   default = ""
 }
 
+variable "nonprod_access_key_id" {
+  type = string
+}
+
+variable "nonprod_secret_access_key" {
+  type = string
+}
+
+variable "nonprod_session_token" {
+  type = string
+  default = ""
+}
+
 variable "prod_access_key_id" {
   type = string
 }

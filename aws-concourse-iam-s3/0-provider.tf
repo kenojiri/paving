@@ -16,6 +16,14 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias      = "nonprod_account"
+  region     = var.region
+  access_key = var.nonprod_access_key_id
+  secret_key = var.nonprod_secret_access_key
+  token      = var.nonprod_session_token
+}
+
+provider "aws" {
   alias      = "prod_account"
   region     = var.region
   access_key = var.prod_access_key_id
