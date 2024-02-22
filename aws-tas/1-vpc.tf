@@ -10,6 +10,13 @@ data "aws_vpc" "foundation" {
   }
 }
 
+data "aws_vpc" "platform_management" {
+  filter {
+    name   = "tag:Name"
+    values = [var.platform_management_vpc_name]
+  }
+}
+
 data "aws_subnet" "a" {
   id = var.subnet_ids[0]
 }

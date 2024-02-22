@@ -12,6 +12,13 @@ resource "aws_security_group" "plane" {
     to_port     = 0
   }
 
+  ingress {
+    cidr_blocks = [data.aws_vpc.platform_management.cidr_block]
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+  }
+
   egress {
     cidr_blocks = ["0.0.0.0/0"]
     protocol    = "-1"
