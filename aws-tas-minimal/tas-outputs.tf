@@ -17,9 +17,9 @@ locals {
     ssh_lb_security_group_name = aws_security_group.ssh-lb.name
     ssh_target_group_name = aws_lb_target_group.ssh-2222.name
 
-    sys_dns_domain = var.cloudflare_api_key == "" ? replace(aws_route53_record.wildcard-sys[0].name, "*.", "") : "sys.${var.environment_name}.${var.base_domain}"
-    apps_dns_domain =  var.cloudflare_api_key == "" ? replace(aws_route53_record.wildcard-apps[0].name, "*.", "") : "apps.${var.environment_name}.${var.base_domain}"
-    ssh_dns = var.cloudflare_api_key == "" ? aws_route53_record.ssh[0].name : "ssh.${var.environment_name}.${var.base_domain}"
+    sys_dns_domain = replace(aws_route53_record.wildcard-sys.name, "*.", "")
+    apps_dns_domain = replace(aws_route53_record.wildcard-apps.name, "*.", "")
+    ssh_dns = aws_route53_record.ssh.name
 
     db_endpoint = var.use_rds == true ? aws_db_instance.tas[0].endpoint : ""
     db_username = var.use_rds == true ? aws_db_instance.tas[0].username : ""

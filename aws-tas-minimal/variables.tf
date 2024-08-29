@@ -1,11 +1,3 @@
-variable "access_key" {
-  type = string
-}
-
-variable "secret_key" {
-  type = string
-}
-
 variable "environment_name" {
   type = string
 }
@@ -47,19 +39,7 @@ variable "ssl_private_key" {
 }
 
 variable "email" {
-  description = "used for Cloudflare DNS and Let's Encrypt"
-  default = ""
-  type = string
-}
-
-variable "cloudflare_api_key" {
-  description = "If this variable is blank, AWS Route53 zone will be created."
-  default = ""
-  type = string
-}
-
-variable "cloudflare_zone_id" {
-  description = "The zone identifier of Cloudflare DNS."
+  description = "used for Let's Encrypt"
   default = ""
   type = string
 }

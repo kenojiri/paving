@@ -1,12 +1,3 @@
-resource "aws_iam_user" "ops-manager" {
-  force_destroy = true
-  name = "${var.environment_name}-ops-manager"
-}
-
-resource "aws_iam_access_key" "ops-manager" {
-  user = aws_iam_user.ops-manager.name
-}
-
 resource "aws_iam_role" "ops-manager" {
   name = "${var.environment_name}-ops-manager-role"
 
@@ -122,10 +113,4 @@ resource "aws_iam_policy" "ops-manager-role" {
 resource "aws_iam_role_policy_attachment" "ops-manager-policy" {
   role       = aws_iam_role.ops-manager.name
   policy_arn = aws_iam_policy.ops-manager-role.arn
-}
-
-resource "aws_iam_user_policy" "ops-manager" {
-  name   = "${var.environment_name}-ops-manager-policy"
-  user   = aws_iam_user.ops-manager.name
-  policy = data.aws_iam_policy_document.ops-manager.json
 }

@@ -10,10 +10,6 @@ terraform {
     tls = {
       source = "hashicorp/tls"
     }
-    cloudflare = {
-      source  = "cloudflare/cloudflare"
-      version = "~> 3.0"
-    }
     acme = {
       source  = "vancluever/acme"
       version = "~> 2.0"

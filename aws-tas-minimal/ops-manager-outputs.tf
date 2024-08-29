@@ -1,7 +1,5 @@
 locals {
   stable_config_opsmanager = {
-    access_key = var.access_key
-    secret_key = var.secret_key
     environment_name = var.environment_name
     availability_zones = var.availability_zone
     region = var.region
@@ -24,9 +22,7 @@ locals {
 
     ops_manager_subnet_id = aws_subnet.public-subnet.id
     ops_manager_public_ip = aws_eip.ops-manager.public_ip
-    ops_manager_dns = var.cloudflare_api_key == "" ? aws_route53_record.ops-manager[0].name : "opsman.${var.environment_name}.${var.base_domain}"
-    ops_manager_iam_user_access_key = aws_iam_access_key.ops-manager.id
-    ops_manager_iam_user_secret_key = aws_iam_access_key.ops-manager.secret
+    ops_manager_dns = aws_route53_record.ops-manager.name
     ops_manager_iam_instance_profile_name = aws_iam_instance_profile.ops-manager.name
     ops_manager_key_pair_name = var.ec2_ssh_key_pair_name == "" ? aws_key_pair.ops-manager[0].key_name : var.ec2_ssh_key_pair_name
     ops_manager_ssh_public_key = var.ec2_ssh_key_pair_name == "" ? tls_private_key.ops-manager[0].public_key_openssh : ""

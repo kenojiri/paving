@@ -16,10 +16,9 @@ resource "acme_certificate" "certificate" {
   subject_alternative_names = ["*.${var.environment_name}.${var.base_domain}", "*.sys.${var.environment_name}.${var.base_domain}", "*.apps.${var.environment_name}.${var.base_domain}"]
 
   dns_challenge {
-    provider = "cloudflare"
+    provider = "route53"
     config = {
-      CF_API_EMAIL = var.email
-      CF_API_KEY = var.cloudflare_api_key
+      AWS_DEFAULT_REGION = var.region
     }
   }
 }
