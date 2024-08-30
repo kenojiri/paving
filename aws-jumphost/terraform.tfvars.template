@@ -1,0 +1,6 @@
+access_key_id = "((AWS_ACCESS_KEY_ID))"
+secret_access_key = "((AWS_SECRET_ACCESS_KEY))"
+session_token = "((AWS_SESSION_TOKEN))"
+region = "us-east-1"
+availability_zone = "us-east-1a"
+ec2_ssh_key_pair_name = "((AWS_EC2_KEYPAIR_NAME))"
