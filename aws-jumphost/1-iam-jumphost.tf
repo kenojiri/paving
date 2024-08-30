@@ -1,31 +1,22 @@
 ## inputs
 ## (none)
 
+data "aws_iam_policy_document" "assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
 resource "aws_iam_role" "jumphost" {
   name = "jumphost-role"
-
   lifecycle {
     create_before_destroy = true
   }
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": [
-          "ec2.amazonaws.com"
-        ]
-      },
-      "Action": [
-        "sts:AssumeRole"
-      ]
-    }
-  ]
-}
-EOF
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 
 resource "aws_iam_instance_profile" "jumphost" {
@@ -246,6 +237,28 @@ data "aws_iam_policy_document" "jumphost" {
       "rds:DeleteDBSubnetGroup",
       "rds:ListTagsForResource",
       "rds:AddTagsToResource",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "ASMPermissions"
+    effect = "Allow"
+    actions = [
+      "secretsmanager:*",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "ACMPermissions"
+    effect = "Allow"
+    actions = [
+      "acm:DescribeCertificate",
+      "acm:ListCertificates",
+      "acm:ListTagsForCertificate",
+      "acm:ImportCertificate",
+      "acm:DeleteCertificate",
     ]
     resources = ["*"]
   }

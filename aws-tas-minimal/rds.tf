@@ -17,11 +17,11 @@ resource "aws_db_instance" "tas" {
   count = var.use_rds == true ? 1 : 0
   allocated_storage = 20 # GiB
   engine = "mysql"
-  engine_version = "5.7"
+  engine_version = "8.0"
   instance_class = "db.t3.small"
   username = var.db_username
   password = "${random_id.db_passwd.id}"
-  parameter_group_name = "default.mysql5.7"
+  parameter_group_name = "default.mysql8.0"
   skip_final_snapshot  = true
   availability_zone = var.availability_zone
   vpc_security_group_ids = [aws_security_group.mysql.id]
