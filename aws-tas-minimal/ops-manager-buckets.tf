@@ -5,6 +5,7 @@ resource "random_integer" "ops_manager_bucket_suffix" {
 
 resource "aws_s3_bucket" "ops-manager-bucket" {
   bucket = "${var.environment_name}-ops-manager-${random_integer.ops_manager_bucket_suffix.result}"
+  force_destroy = true
 
   tags = merge(
     var.tags,

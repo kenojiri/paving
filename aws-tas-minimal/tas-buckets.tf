@@ -5,6 +5,7 @@ resource "random_integer" "tas_bucket_suffix" {
 
 resource "aws_s3_bucket" "buildpacks-bucket" {
   bucket = "${var.environment_name}-buildpacks-${random_integer.tas_bucket_suffix.result}"
+  force_destroy = true
 
   tags = merge(
   var.tags,
@@ -21,6 +22,7 @@ resource "aws_s3_bucket_versioning" "buildpacks-bucket" {
 
 resource "aws_s3_bucket" "packages-bucket" {
   bucket = "${var.environment_name}-packages-${random_integer.tas_bucket_suffix.result}"
+  force_destroy = true
 
   tags = merge(
   var.tags,
@@ -37,6 +39,7 @@ resource "aws_s3_bucket_versioning" "packages-bucket" {
 
 resource "aws_s3_bucket" "resources-bucket" {
   bucket = "${var.environment_name}-resources-${random_integer.tas_bucket_suffix.result}"
+  force_destroy = true
 
   tags = merge(
   var.tags,
@@ -53,6 +56,7 @@ resource "aws_s3_bucket_versioning" "resources-bucket" {
 
 resource "aws_s3_bucket" "droplets-bucket" {
   bucket = "${var.environment_name}-droplets-${random_integer.tas_bucket_suffix.result}"
+  force_destroy = true
 
   tags = merge(
   var.tags,
